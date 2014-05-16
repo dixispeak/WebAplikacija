@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+@model WebAplikacija.Models.Pirkiniai
+
+<div>
+    @using (Html.BeginForm("Index", "Home")) 
+    { 
+    <h1>Įveskite pirkinius:</h1>
+    @Html.TextBoxFor(m => m.Name)
+    <input type="submit" title="saveBtn" value="Įtraukti į sąraša"/>
+    }
+
+    <h2>Jūsų pirkinių sąrašas:</h2>
+    @if (Model.PirkiniuSarasas != null) { 
+        foreach (var el in Model.PirkiniuSarasas) 
+        {
+        <p> @el</p>
+        }
+    }    
+</div>
