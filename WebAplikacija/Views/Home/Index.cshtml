@@ -3,19 +3,32 @@
 }
 @model WebAplikacija.Models.Pirkiniai
 
-<div>
-    @using (Html.BeginForm("Index", "Home")) 
-    { 
-    <h1>Įveskite pirkinius:</h1>
-    @Html.TextBoxFor(m => m.Name)
-    <input type="submit" title="saveBtn" value="Įtraukti į sąraša"/>
-    }
-
-    <h2>Jūsų pirkinių sąrašas:</h2>
-    @if (Model.PirkiniuSarasas != null) { 
-        foreach (var el in Model.PirkiniuSarasas) 
+<div class="col-md-offset-4">
+        @using (Html.BeginForm("Index", "Home",FormMethod.Post, new { @class="form-horizontal"})) 
         {
-        <p> @el</p>
+            <div class="form-group">
+                <label class="col-md-2 control-label">Įveskite pirkinius:</label>
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control col-md-4" })
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2">
+                    <input type="submit" class="btn" title="saveBtn" value="Įtraukti į sąraša" />
+                </div>
+            </div>
+        
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Jūsų pirkinių sąrašas:</label>
+            <ul class="list-group col-md-4">
+                @if (Model.PirkiniuSarasas != null)
+                {
+                    foreach (var el in Model.PirkiniuSarasas)
+                    {
+                        <li class="list-group-item"> @el<span class="badge">&times;</span></li>
+                    }
+                }
+            </ul>
+
+        </div>
         }
-    }    
 </div>
