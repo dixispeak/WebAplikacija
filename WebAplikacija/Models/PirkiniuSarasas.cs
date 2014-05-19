@@ -8,16 +8,16 @@ namespace WebAplikacija.Models
 {
     public class PirkiniuSarasas
     {
-        private Dictionary<string, decimal> pirkiniuDictionary = new Dictionary<string, decimal>();
+        private Dictionary<int, string> pirkiniuDictionary = new Dictionary<int, string>();
 
-        public Dictionary<string, decimal> PirkiniuDictionary { get; set; }
+        public Dictionary<int, string> PirkiniuDictionary { get; set; }
 
         public string Name { get; set; }
         public decimal Price { get; set; }
 
-        public Dictionary<string, decimal> ReadDocument()
+        public Dictionary<int, string> ReadDocument()
         {
-            Dictionary<string, decimal> dictionary = new Dictionary<string, decimal>();
+            Dictionary<int, string> dictionary = new Dictionary<int, string>();
 
             string path = @"C:\Users\Monika\Desktop\Test.txt";
             if (!File.Exists(path))
@@ -33,9 +33,9 @@ namespace WebAplikacija.Models
                     while ((line = file.ReadLine()) != null)
                     {
                         string[] dictionaryparts = line.Split('$');
-                        string name = dictionaryparts[0];
-                        decimal price = Convert.ToDecimal(dictionaryparts[1]);
-                        dictionary.Add(name, price);
+                        int count = Convert.ToInt32(dictionaryparts[0]);
+                        string nameprice =dictionaryparts[1];
+                        dictionary.Add(count, nameprice);
                     }
                 }
                 return dictionary;
@@ -44,15 +44,19 @@ namespace WebAplikacija.Models
 
         public void WriteToDocument(string name, decimal price)
         {
+            decimal _price = Math.Round(price, 2);
+
             string path = @"C:\Users\Monika\Desktop\Test.txt";
             if (!File.Exists(path))
             {
                 using (File.Create(path)) ;
             }
+            var lineCount = File.ReadLines(path).Count();
+
             StreamWriter file = new StreamWriter(path, true);
             using (file)
             {
-                file.WriteLine(name + "$ " + price);
+                file.WriteLine((lineCount + 1) + "$" + name + " - " + string.Format("{0:0.00}", _price) + "Lt");
             }
         }
     }

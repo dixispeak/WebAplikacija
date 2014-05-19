@@ -26,12 +26,9 @@
             <ul class="list-group col-md-4">
                 @if (Model.PirkiniuDictionary != null)
                 {
-                    int i = 0;
                     foreach (var el in Model.PirkiniuDictionary)
                     {
-                        <li class="list-group-item" id=i> @el.Key</li>
-                        <li class="list-group-item" id=i> @el.Value<span class="badge">&times;</span></li>
-                        i++;
+                        <li class="list-group-item" id=@el.Key>@el.Value<span class="badge">&times;</span></li>
                     }
                 }
             </ul>
