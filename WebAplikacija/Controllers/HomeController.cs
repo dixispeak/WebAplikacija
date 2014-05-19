@@ -13,7 +13,7 @@ namespace WebAplikacija.Controllers
         public ActionResult Index()
         {
             PirkiniuSarasas sarasas = new PirkiniuSarasas();
-            sarasas.ReadDocument();
+            sarasas.PirkiniuDictionary = sarasas.ReadDocument();
             return View(sarasas);
         }
 

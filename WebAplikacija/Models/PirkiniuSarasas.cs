@@ -32,7 +32,7 @@ namespace WebAplikacija.Models
                     string line;
                     while ((line = file.ReadLine()) != null)
                     {
-                        string[] dictionaryparts = line.Split(',');
+                        string[] dictionaryparts = line.Split('$');
                         string name = dictionaryparts[0];
                         decimal price = Convert.ToDecimal(dictionaryparts[1]);
                         dictionary.Add(name, price);
@@ -52,7 +52,7 @@ namespace WebAplikacija.Models
             StreamWriter file = new StreamWriter(path, true);
             using (file)
             {
-                file.WriteLine(name + ", " + price);
+                file.WriteLine(name + "$ " + price);
             }
         }
     }
