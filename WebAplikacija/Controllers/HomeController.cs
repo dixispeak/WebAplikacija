@@ -12,18 +12,21 @@ namespace WebAplikacija.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            Pirkiniai sarasas = new Pirkiniai();
-            sarasas.PirkiniuSarasas = sarasas.ReadDocument();
+            PirkiniuSarasas sarasas = new PirkiniuSarasas();
+            sarasas.ReadDocument();
             return View(sarasas);
         }
 
         [HttpPost]
-        public ActionResult Index(Pirkiniai sarasas)
+        public ActionResult Index(PirkiniuSarasas sarasas)
         {
             //ModelState.Clear();
-            //sarasas.Name = "asda";
-            sarasas.WriteToDocument(sarasas.Name);
-            sarasas.PirkiniuSarasas = sarasas.ReadDocument();
+            
+            string _name = sarasas.Name;
+            decimal _price = sarasas.Price;
+
+            sarasas.WriteToDocument(_name, _price);
+            sarasas.PirkiniuDictionary = sarasas.ReadDocument();
             return View(sarasas);
         }
 
