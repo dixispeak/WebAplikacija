@@ -54,5 +54,7 @@ namespace WebAplikacija.Models
                 file.WriteLine((lineCount + 1) + "$" + name + "$" + string.Format("{0:0.00}", _price));
             }
         }
+
+        //public void Delete {
     }
 }

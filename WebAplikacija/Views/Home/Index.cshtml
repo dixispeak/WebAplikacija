@@ -23,15 +23,17 @@
 
         <div class="form-group">
             <label class="control-label col-md-2">Jūsų pirkinių sąrašas:</label>
-            <ul class="list-group col-md-4">
+            <div class="list-group col-md-4">
                 @if (Model.PirkiniuDictionary != null)
                 {
                     foreach (var el in Model.PirkiniuDictionary)
                     {
-                        <li class="list-group-item" id=@el.Key>@el.Value.Name - @el.Value.Price Lt<span class="badge">&times;</span></li>
+                        <a href="#" class="list-group-item" id=@el.Key>@el.Value.Name - @el.Value.Price Lt
+                            <span class="badge btn right">&times;</span>
+                        </a>
                     }
                 }
-            </ul>
+            </div>
 
         </div>
         }
