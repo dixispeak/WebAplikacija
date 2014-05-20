@@ -9,25 +9,32 @@ namespace WebAplikacija.Controllers
 {
     public class HomeController : Controller
     {
+        Dictionary<int, Pirkinys> pirkiniuDictionary = new Dictionary<int, Pirkinys>();
+
         [HttpGet]
         public ActionResult Index()
         {
-            PirkiniuSarasas sarasas = new PirkiniuSarasas();
-            sarasas.PirkiniuDictionary = sarasas.ReadDocument();
-            return View(sarasas);
+            PirkiniuSarasas pirkiniuSarasas = new PirkiniuSarasas();
+            Dictionary<int, Pirkinys> pirkiniuDictionary = new Dictionary<int, Pirkinys>();
+           
+            pirkiniuSarasas.PirkiniuDictionary = pirkiniuDictionary;
+            pirkiniuSarasas.ReadDocument();
+
+            return View(pirkiniuSarasas);
         }
 
         [HttpPost]
-        public ActionResult Index(PirkiniuSarasas sarasas)
+        public ActionResult Index(PirkiniuSarasas pirkiniuSarasas)
         {
             //ModelState.Clear();
-            
-            string _name = sarasas.Name;
-            decimal _price = sarasas.Price;
+            //Pirkinys pirkinys = new Pirkinys();
+            //Dictionary<int, Pirkinys> pirkiniuDictionary = new Dictionary<int, Pirkinys>();
 
-            sarasas.WriteToDocument(_name, _price);
-            sarasas.PirkiniuDictionary = sarasas.ReadDocument();
-            return View(sarasas);
+            pirkiniuSarasas.PirkiniuDictionary = pirkiniuDictionary;
+
+            pirkiniuSarasas.WriteToDocument(pirkiniuSarasas.Pirkinys.Name, pirkiniuSarasas.Pirkinys.Price);
+            pirkiniuSarasas.ReadDocument();
+            return View(pirkiniuSarasas);
         }
 
         public ActionResult About()

@@ -8,12 +8,8 @@ namespace WebAplikacija.Models
 {
     public class Pirkinys
     {
-       
-
-        //public List<string> PirkiniuSarasas { get; set; }
-
-        
-        
+        public string Name { get; set; }
+        public decimal Price { get; set; }
 
 //        public Delete {
 
