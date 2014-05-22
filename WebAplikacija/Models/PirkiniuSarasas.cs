@@ -14,12 +14,15 @@ namespace WebAplikacija.Models
         //private Dictionary<int, Pirkinys> pirkiniuDictionary = new Dictionary<int, Pirkinys>();
         //private Pirkinys pirkinys = new Pirkinys();
 
-        public void ReadDocument()
+        public Dictionary<int, Pirkinys> ReadDocument()
         {
+            Dictionary<int, Pirkinys> _pirkiniuDictionary = new Dictionary<int, Pirkinys>();
+
             string path = @"C:\Users\Monika\Desktop\Test.txt";
             if (!File.Exists(path))
             {
                 using (File.Create(path));
+                return null;
             }
             else
             {
@@ -34,9 +37,10 @@ namespace WebAplikacija.Models
                         Pirkinys _pirkinys = new Pirkinys();
                         _pirkinys.Name = dictionaryparts[1];
                         _pirkinys.Price = Convert.ToDecimal(dictionaryparts[2]);
-                        PirkiniuDictionary.Add(count, _pirkinys);
+                        _pirkiniuDictionary.Add(count, _pirkinys);
                     }
                 }
+                return _pirkiniuDictionary;
             }
         }
 
@@ -45,7 +49,7 @@ namespace WebAplikacija.Models
             decimal _price = Math.Round(price, 2);
 
             string path = @"C:\Users\Monika\Desktop\Test.txt";
-            
+
             var lineCount = File.ReadLines(path).Count();
 
             StreamWriter file = new StreamWriter(path, true);
@@ -55,6 +59,33 @@ namespace WebAplikacija.Models
             }
         }
 
-        //public void Delete {
+        public void Delete(int id)
+        {
+            Dictionary<int, Pirkinys> _pirkiniuDictionary = new Dictionary<int, Pirkinys>();
+            _pirkiniuDictionary = ReadDocument();
+            _pirkiniuDictionary.Remove(id);
+
+            string path = @"C:\Users\Monika\Desktop\Test.txt";
+
+            int lineCount = _pirkiniuDictionary.Count;
+            if (lineCount != 0)
+            {
+                StreamWriter file = new StreamWriter(path, false);
+                using (file)
+                {
+                    lineCount = 0;
+                    foreach (var el in _pirkiniuDictionary)
+                    {
+                        file.WriteLine((lineCount + 1) + "$" + el.Value.Name + "$" + el.Value.Price);
+                    }
+                }
+            }
+            else
+            {
+                StreamWriter file = new StreamWriter(path, false);
+                file.Close();
+            }
+        }
+
     }
 }
