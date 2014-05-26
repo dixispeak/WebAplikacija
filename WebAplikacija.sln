@@ -5,6 +5,10 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAplikacija", "WebAplikacija\WebAplikacija.csproj", "{417E0249-172F-4692-B04F-C43CAE0E5BF0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IslaiduModelis", "DataService\IslaiduModelis.csproj", "{BE4107A5-4AEA-46E6-B445-020F8E22EC20}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IslaiduService", "IslaiduService\IslaiduService.csproj", "{E8244088-1DE5-462A-90B2-A97410BA9768}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{417E0249-172F-4692-B04F-C43CAE0E5BF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{417E0249-172F-4692-B04F-C43CAE0E5BF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{417E0249-172F-4692-B04F-C43CAE0E5BF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE4107A5-4AEA-46E6-B445-020F8E22EC20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE4107A5-4AEA-46E6-B445-020F8E22EC20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE4107A5-4AEA-46E6-B445-020F8E22EC20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE4107A5-4AEA-46E6-B445-020F8E22EC20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8244088-1DE5-462A-90B2-A97410BA9768}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8244088-1DE5-462A-90B2-A97410BA9768}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8244088-1DE5-462A-90B2-A97410BA9768}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8244088-1DE5-462A-90B2-A97410BA9768}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

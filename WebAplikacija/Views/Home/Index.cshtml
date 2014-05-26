@@ -3,25 +3,81 @@
 }
 @model WebAplikacija.Models.PirkiniuSarasas
 
+<script type="text/javascript">
+    function jsDecimals(e) { 
+        var evt = (e) ? e : window.event;
+        var key = (evt.keyCode) ? evt.keyCode : evt.which;
+        if (key != null) {
+            key = parseInt(key, 10);
+            if ((key < 48 || key > 57) && (key < 96 || key > 105)) {
+                if (!jsIsUserFriendlyChar(key, "Decimals")) {
+                    return false;
+                }
+            }
+            else {
+                if (evt.shiftKey) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+ 
+    // Function to check for user friendly keys  
+    //------------------------------------------
+    function jsIsUserFriendlyChar(val, step) {
+        // Backspace, Tab, Enter, Insert, and Delete  
+        if (val == 8 || val == 9 || val == 13 || val == 45 || val == 46) {
+            return true;
+        }
+        // Ctrl, Alt, CapsLock, Home, End, and Arrows  
+        if ((val > 16 && val < 21) || (val > 34 && val < 41)) {
+            return true;
+        }
+        if (step == "Decimals") {
+            if (val == 190 || val == 110) {  //Check dot key code should be allowed
+                return true;
+            }
+        }
+        // The rest  
+        return false;
+    }
+
+    function checkTextBox() {
+        var textboxName = document.getElementById("TextBoxName");
+        var textboxPrice = document.getElementById("TextBoxPrice");
+
+        if (!textboxName.value || !textboxPrice.value)
+        {
+            alert("Nevisi laukeliai užpildyti");
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+</script>
+
+
+
 <div class="col-md-offset-4">
-        @using (Html.BeginForm("Index", "Home",FormMethod.Post, new { @class="form-horizontal"})) 
+        @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "form-horizontal", onsubmit = "return checkTextBox();"})) 
         {
             <div class="form-group">
                 <label class="col-md-2 control-label">Įveskite pirkinį:</label>
-                @Html.TextBoxFor(m =>m.Pirkinys.Name , new { @class = "form-control col-md-4" })
+                @Html.TextBoxFor(m => m.Pirkinys.Name, new { @class = "form-control col-md-4", id="TextBoxName" })
             </div>
             <div class="form-group">
                 <label class="col-md-2 control-label">Pirkinio kaina:</label>
-                @Html.TextBoxFor(m => m.Pirkinys.Price, new { @class = "form-control col-md-4" })
+                @Html.TextBoxFor(m => m.Pirkinys.Price, new { @class = "form-control col-md-4", onkeydown = "return jsDecimals(event);", id = "TextBoxPrice" })
             </div>
             <div class="form-group">
                 <div class="col-md-offset-2">
                     <input type="submit" class="btn" title="saveBtn" value="Įtraukti į sąraša" />
                 </div>
             </div>
-}
-        
-        
+            
             <div class="form-group">
                 <label class="control-label col-md-2">Jūsų pirkinių sąrašas:</label>
                 <ul class="list-group col-md-4">
@@ -39,5 +95,5 @@
                 </ul>
 
             </div>
-        
+        }
 </div>

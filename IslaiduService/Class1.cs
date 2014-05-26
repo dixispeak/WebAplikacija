@@ -2,18 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace WebAplikacija.Models
+namespace IslaiduService
 {
-    public class PirkiniuSarasas
+    public class Class1
     {
-        public Pirkinys Pirkinys {get; set;}
-        public Dictionary<int, Pirkinys> PirkiniuDictionary { get; set; }
-
-        //private Dictionary<int, Pirkinys> pirkiniuDictionary = new Dictionary<int, Pirkinys>();
-        //private Pirkinys pirkinys = new Pirkinys();
-
         public Dictionary<int, Pirkinys> ReadDocument()
         {
             Dictionary<int, Pirkinys> _pirkiniuDictionary = new Dictionary<int, Pirkinys>();
@@ -21,7 +16,7 @@ namespace WebAplikacija.Models
             string path = @"C:\Users\Monika\Desktop\Test.txt";
             if (!File.Exists(path))
             {
-                using (File.Create(path));
+                using (File.Create(path)) ;
                 return null;
             }
             else
@@ -77,7 +72,6 @@ namespace WebAplikacija.Models
                     foreach (var el in _pirkiniuDictionary)
                     {
                         file.WriteLine((lineCount + 1) + "$" + el.Value.Name + "$" + el.Value.Price);
-                        lineCount++;
                     }
                 }
             }
@@ -87,6 +81,5 @@ namespace WebAplikacija.Models
                 file.Close();
             }
         }
-
     }
 }
