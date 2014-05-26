@@ -1,22 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace WebAplikacija.Models
+namespace SpendingsBL.Entities
 {
-    public class Pirkinys
+    public class PurchaseEntity
     {
         public string Name { get; set; }
         public decimal Price { get; set; }
-
-//        public Delete {
-
-//    }
-
-//    private Find {
-
-//}
     }
 }

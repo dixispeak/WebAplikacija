@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using SpendingsBL.Entities;
+using SpendingsBL.Interfaces;
+using SpendingsBL.Services;
 using WebAplikacija.Models;
 
 namespace WebAplikacija.Controllers
@@ -12,31 +15,34 @@ namespace WebAplikacija.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            PirkiniuSarasas pirkiniuSarasas = new PirkiniuSarasas();
+            ISpendingsService spendingsService = new SpendingsService();
 
-            pirkiniuSarasas.PirkiniuDictionary = pirkiniuSarasas.ReadDocument();
+            PurchasesList purchasesList = new PurchasesList();
 
-            return View(pirkiniuSarasas);
+            purchasesList.PurchaseDictionary = spendingsService.GetSpendings();
+
+            return View(purchasesList);
         }
 
         [HttpPost]
-        public ActionResult Index(PirkiniuSarasas pirkiniuSarasas)
+        public ActionResult Index(PurchasesList purchasesList)
         {
-            //ModelState.Clear();
-            //Pirkinys pirkinys = new Pirkinys();
-            //Dictionary<int, Pirkinys> pirkiniuDictionary = new Dictionary<int, Pirkinys>();
-            pirkiniuSarasas.WriteToDocument(pirkiniuSarasas.Pirkinys.Name, pirkiniuSarasas.Pirkinys.Price);
-            pirkiniuSarasas.PirkiniuDictionary = pirkiniuSarasas.ReadDocument();
-            return View(pirkiniuSarasas);
+            ISpendingsService spendingsService = new SpendingsService();
+
+            spendingsService.AddSpending(purchasesList.Purchase.Name, purchasesList.Purchase.Price);
+            purchasesList.PurchaseDictionary= spendingsService.GetSpendings();
+            return View(purchasesList);
         }
 
         public ActionResult Delete(int id)
         {
-            PirkiniuSarasas pirkiniuSarasas = new PirkiniuSarasas();
-            pirkiniuSarasas.Delete(id);
+            ISpendingsService spendingsService = new SpendingsService();
+            PurchasesList purchasesList = new PurchasesList();
 
-            pirkiniuSarasas.PirkiniuDictionary = pirkiniuSarasas.ReadDocument();
-            return View("Index", pirkiniuSarasas);
+            spendingsService.DeleteSpending(id);
+
+            purchasesList.PurchaseDictionary = spendingsService.GetSpendings();
+            return View("Index", purchasesList);
         }
 
         public ActionResult About()

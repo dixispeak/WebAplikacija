@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataService.Klases
 {
-    class PirkiniuSarasas : IIslaiduInterface
+    class PirkiniuSarasas : ISpendingInterface
     {
         public Dictionary<int, Pirkinys> ReadDocument()
         {

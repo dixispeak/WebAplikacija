@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataService.Interface
 {
-    public interface IIslaiduInterface
+    public interface ISpendingInterface
     {
         public Dictionary<int, Pirkinys> ReadDocument();
         public void WriteToDocument(string name, decimal price);

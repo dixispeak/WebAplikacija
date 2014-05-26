@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
-@model WebAplikacija.Models.PirkiniuSarasas
+@model WebAplikacija.Models.PurchasesList
 
 <script type="text/javascript">
     function jsDecimals(e) { 
@@ -66,11 +66,11 @@
         {
             <div class="form-group">
                 <label class="col-md-2 control-label">Įveskite pirkinį:</label>
-                @Html.TextBoxFor(m => m.Pirkinys.Name, new { @class = "form-control col-md-4", id="TextBoxName" })
+                @Html.TextBoxFor(m => m.Purchase.Name, new { @class = "form-control col-md-4", id="TextBoxName" })
             </div>
             <div class="form-group">
                 <label class="col-md-2 control-label">Pirkinio kaina:</label>
-                @Html.TextBoxFor(m => m.Pirkinys.Price, new { @class = "form-control col-md-4", onkeydown = "return jsDecimals(event);", id = "TextBoxPrice" })
+                @Html.TextBoxFor(m => m.Purchase.Price, new { @class = "form-control col-md-4", onkeydown = "return jsDecimals(event);", id = "TextBoxPrice" })
             </div>
             <div class="form-group">
                 <div class="col-md-offset-2">
@@ -81,9 +81,9 @@
             <div class="form-group">
                 <label class="control-label col-md-2">Jūsų pirkinių sąrašas:</label>
                 <ul class="list-group col-md-4">
-                    @if (Model.PirkiniuDictionary != null)
+                    @if (Model.PurchaseDictionary != null)
                     {
-                        foreach (var el in Model.PirkiniuDictionary)
+                        foreach (var el in Model.PurchaseDictionary)
                         {
                             <li class="list-group-item" id=@el.Key>@el.Value.Name - @el.Value.Price Lt
                                 <a href="@Url.Action("Delete", "Home", new { id = @el.Key})" class="btn badge">
