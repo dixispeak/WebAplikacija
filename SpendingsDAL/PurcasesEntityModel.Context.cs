@@ -13,10 +13,10 @@ namespace SpendingsDAL
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class PurchaseEntities : DbContext
+    public partial class PurchasesEntities : DbContext
     {
-        public PurchaseEntities()
-            : base("name=PurchaseEntities")
+        public PurchasesEntities()
+            : base("name=PurchasesEntities")
         {
         }
     
