@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("IslaiduService")]
+[assembly: AssemblyTitle("SpendingsDAL")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("IslaiduService")]
+[assembly: AssemblyProduct("SpendingsDAL")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("004e5992-3f8e-47dc-99be-df30b27e2321")]
+[assembly: Guid("bc03b78b-77b4-4f2d-9961-b162197f3c7b")]
 
 // Version information for an assembly consists of the following four values:
 //
