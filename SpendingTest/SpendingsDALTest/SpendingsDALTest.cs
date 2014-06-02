@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SpendingsDAL;
-using SpendingsBL.Entities;
 
 
 namespace SpendingTest.SpendingsDALTest
@@ -13,16 +12,38 @@ namespace SpendingTest.SpendingsDALTest
     [TestFixture]
     public class SpendingsDALTest
     {
-        private PurchaseEntities purchasesContext;
-        private List<Purchase> puchasesTable;
-
         [Test]
-        public void AddPurchasesTest () 
+        public void AddPurchasesTest ()
         {
-            purchasesContext = new PurchaseEntities();
-            puchasesTable = purchasesContext.Purchases
+            //PurchasesEntities spendingsContext = new PurchasesEntities();
 
-            public DBset
+            //Purchase purchaseEntity = new Purchase
+            //{
+            //    ID = 1,
+            //    Name = "Bananas",
+            //    Price = 1.23m
+            //};
+
+            //spendingsContext.Purchases.Add(purchaseEntity);
+
+            //spendingsContext.SaveChanges();
+
+            //Purchase savePurchase = (from p in spendingsContext.Purchases where p.ID == purchaseEntity.ID select p).Single();
+
+            //savePurchase.ID.Equals(purchaseEntity.ID);
+            //savePurchase.Name.Equals(purchaseEntity.Name);
+            //savePurchase.Price.Equals(purchaseEntity.Price);
+
+            PurchasesEntities spendingsContext = new PurchasesEntities();
+
+            Purchase thisEntity = new Purchase
+            {
+                Name = "Katinas"
+            };
+
+            Purchase savePurchase = (from p in spendingsContext.Purchases where p.ID == 1 select p).Single();
+
+            savePurchase.Name.Equals(thisEntity.Name);
         }
     }
 }
