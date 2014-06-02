@@ -17,32 +17,32 @@ namespace WebAplikacija.Controllers
         {
             ISpendingsService spendingsService = new SpendingsService();
 
-            PurchasesList purchasesList = new PurchasesList();
+            Purchases purchases = new Purchases();
 
-            purchasesList.PurchaseDictionary = spendingsService.GetSpendings();
+            purchases.PurchasesList = spendingsService.GetSpendings();
 
-            return View(purchasesList);
+            return View(purchases);
         }
 
         [HttpPost]
-        public ActionResult Index(PurchasesList purchasesList)
+        public ActionResult Index(Purchases purchases)
         {
             ISpendingsService spendingsService = new SpendingsService();
 
-            spendingsService.AddSpending(purchasesList.Purchase.Name, purchasesList.Purchase.Price);
-            purchasesList.PurchaseDictionary= spendingsService.GetSpendings();
-            return View(purchasesList);
+            spendingsService.AddSpending(purchases.Purchase);
+            purchases.PurchasesList = spendingsService.GetSpendings();
+            return View(purchases);
         }
 
         public ActionResult Delete(int id)
         {
             ISpendingsService spendingsService = new SpendingsService();
-            PurchasesList purchasesList = new PurchasesList();
+            Purchases purchases = new Purchases();
 
             spendingsService.DeleteSpending(id);
 
-            purchasesList.PurchaseDictionary = spendingsService.GetSpendings();
-            return View("Index", purchasesList);
+            purchases.PurchasesList = spendingsService.GetSpendings();
+            return View("Index", purchases);
         }
 
         public ActionResult About()

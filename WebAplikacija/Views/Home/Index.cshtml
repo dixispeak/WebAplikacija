@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
-@model WebAplikacija.Models.PurchasesList
+@model WebAplikacija.Models.Purchases
 
 <script type="text/javascript">
     function jsDecimals(e) { 
@@ -81,12 +81,12 @@
             <div class="form-group">
                 <label class="control-label col-md-2">Jūsų pirkinių sąrašas:</label>
                 <ul class="list-group col-md-4">
-                    @if (Model.PurchaseDictionary != null)
+                    @if (Model.PurchasesList != null)
                     {
-                        foreach (var el in Model.PurchaseDictionary)
+                        foreach (var el in Model.PurchasesList)
                         {
-                            <li class="list-group-item" id=@el.Key>@el.Value.Name - @el.Value.Price Lt
-                                <a href="@Url.Action("Delete", "Home", new { id = @el.Key})" class="btn badge">
+                            <li class="list-group-item" id=@el.ID>@el.Name - @el.Price Lt
+                                <a href="@Url.Action("Delete", "Home", new { id = @el.ID })" class="btn badge">
                                     &times;
                                 </a>
                             </li>

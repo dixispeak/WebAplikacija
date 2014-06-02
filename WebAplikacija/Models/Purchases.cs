@@ -4,12 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using SpendingsBL.Entities;
+using SpendingsDAL;
 
 namespace WebAplikacija.Models
 {
-    public class PurchasesList
+    public class Purchases
     {
-        public PurchaseEntity Purchase { get; set; }
-        public Dictionary<int, PurchaseEntity> PurchaseDictionary { get; set; }
+        public Purchase Purchase { get; set; }
+        public List<Purchase> PurchasesList { get; set; }
     }
 }

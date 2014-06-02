@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SpendingsBL.Entities;
+using SpendingsDAL;
 
 namespace SpendingsBL.Interfaces
 {
     public interface ISpendingsService
     {
-        Dictionary<int, PurchaseEntity> GetSpendings();
+        List<Purchase> GetSpendings();
         void DeleteSpending(int id);
-        void AddSpending(string name, decimal price);
-
+        void AddSpending(Purchase purchase);
     }
 }

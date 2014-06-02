@@ -6,84 +6,40 @@ using System.Text;
 using System.Threading.Tasks;
 using SpendingsBL.Entities;
 using SpendingsBL.Interfaces;
+using SpendingsDAL;
 
 namespace SpendingsBL.Services
 {
     public class SpendingsService : ISpendingsService
     {
 
-        public Dictionary<int, PurchaseEntity> GetSpendings()
+        public List<Purchase> GetSpendings()
         {
-            Dictionary<int, PurchaseEntity> purchaseDictionary = new Dictionary<int, PurchaseEntity>();
+            PurchasesEntities spendingsContext = new PurchasesEntities();
 
-            string path = @"C:\Users\Monika\Desktop\Test.txt";
-            if (!File.Exists(path))
-            {
-                using (File.Create(path)) ;
-                return null;
-            }
-            else
-            {
-                StreamReader file = new StreamReader(path);
-                using (file)
-                {
-                    string line;
-                    while ((line = file.ReadLine()) != null)
-                    {
-                        string[] dictionaryparts = line.Split('$');
-                        int count = Convert.ToInt32(dictionaryparts[0]);
-                        PurchaseEntity purchase = new PurchaseEntity();
-                        purchase.Name = dictionaryparts[1];
-                        purchase.Price = Convert.ToDecimal(dictionaryparts[2]);
-                        purchaseDictionary.Add(count, purchase);
-                    }
-                }
-                return purchaseDictionary;
-            }
+             List<Purchase> purchasesList = spendingsContext.Purchases.ToList();
+
+            return purchasesList;
         }
 
         public void DeleteSpending(int id)
         {
-            Dictionary<int, PurchaseEntity> purchaseDictionary = new Dictionary<int, PurchaseEntity>();
-            purchaseDictionary = GetSpendings();
-            purchaseDictionary.Remove(id);
+            PurchasesEntities spendingsContext = new PurchasesEntities();
+            //Purchase table = spendingsContext.Purchases;
 
-            string path = @"C:\Users\Monika\Desktop\Test.txt";
+            Purchase purchase = spendingsContext.Purchases.Find(id);
 
-            int lineCount = purchaseDictionary.Count;
-            if (lineCount != 0)
-            {
-                StreamWriter file = new StreamWriter(path, false);
-                using (file)
-                {
-                    lineCount = 0;
-                    foreach (var el in purchaseDictionary)
-                    {
-                        file.WriteLine((lineCount + 1) + "$" + el.Value.Name + "$" + el.Value.Price);
-                        lineCount++;
-                    }
-                }
-            }
-            else
-            {
-                StreamWriter file = new StreamWriter(path, false);
-                file.Close();
-            }
+            spendingsContext.Purchases.Remove(purchase);
+
+            spendingsContext.SaveChanges();
         }
 
-        public void AddSpending(string name, decimal price)
+        public void AddSpending(Purchase purchase)
         {
-            decimal _price = Math.Round(price, 2);
+            PurchasesEntities spendingsContext = new PurchasesEntities();
 
-            string path = @"C:\Users\Monika\Desktop\Test.txt";
-
-            var lineCount = File.ReadLines(path).Count();
-
-            StreamWriter file = new StreamWriter(path, true);
-            using (file)
-            {
-                file.WriteLine((lineCount + 1) + "$" + name + "$" + string.Format("{0:0.00}", _price));
-            }
+            spendingsContext.Purchases.Add(purchase);
+            spendingsContext.SaveChanges();
         }
     }
 }
