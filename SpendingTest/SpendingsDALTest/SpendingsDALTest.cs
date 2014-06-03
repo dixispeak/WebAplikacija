@@ -9,41 +9,41 @@ using SpendingsDAL;
 
 namespace SpendingTest.SpendingsDALTest
 {
-    [TestFixture]
-    public class SpendingsDALTest
-    {
-        [Test]
-        public void AddPurchasesTest ()
-        {
-            //PurchasesEntities spendingsContext = new PurchasesEntities();
+    //[TestFixture]
+    //public class SpendingsDALTest
+    //{
+    //    [Test]
+    //    public void AddPurchasesTest ()
+    //    {
+    //        //PurchasesEntities spendingsContext = new PurchasesEntities();
 
-            //Purchase purchaseEntity = new Purchase
-            //{
-            //    ID = 1,
-            //    Name = "Bananas",
-            //    Price = 1.23m
-            //};
+    //        //Purchase purchaseEntity = new Purchase
+    //        //{
+    //        //    ID = 1,
+    //        //    Name = "Bananas",
+    //        //    Price = 1.23m
+    //        //};
 
-            //spendingsContext.Purchases.Add(purchaseEntity);
+    //        //spendingsContext.Purchases.Add(purchaseEntity);
 
-            //spendingsContext.SaveChanges();
+    //        //spendingsContext.SaveChanges();
 
-            //Purchase savePurchase = (from p in spendingsContext.Purchases where p.ID == purchaseEntity.ID select p).Single();
+    //        //Purchase savePurchase = (from p in spendingsContext.Purchases where p.ID == purchaseEntity.ID select p).Single();
 
-            //savePurchase.ID.Equals(purchaseEntity.ID);
-            //savePurchase.Name.Equals(purchaseEntity.Name);
-            //savePurchase.Price.Equals(purchaseEntity.Price);
+    //        //savePurchase.ID.Equals(purchaseEntity.ID);
+    //        //savePurchase.Name.Equals(purchaseEntity.Name);
+    //        //savePurchase.Price.Equals(purchaseEntity.Price);
 
-            PurchasesEntities spendingsContext = new PurchasesEntities();
+    //        PurchasesEntities spendingsContext = new PurchasesEntities();
 
-            Purchase thisEntity = new Purchase
-            {
-                Name = "Katinas"
-            };
+    //        Purchase thisEntity = new Purchase
+    //        {
+    //            Name = "Katinas"
+    //        };
 
-            Purchase savePurchase = (from p in spendingsContext.Purchases where p.ID == 1 select p).Single();
+    //        List<Purchase> savePurchases = spendingsContext.Purchases.Find(1);
 
-            savePurchase.Name.Equals(thisEntity.Name);
-        }
-    }
+    //        savePurchase.Name.Equals(thisEntity.Name);
+    //    }
+    //}
 }

@@ -51,13 +51,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpendingsBLTest\SpendingsBLTEst.cs" />
     <Compile Include="SpendingsDALTest\SpendingsDALTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SpendingsBL\SpendingsBL.csproj">
+      <Project>{796af1dc-fcfd-4da6-a7aa-3bd477eb2d99}</Project>
+      <Name>SpendingsBL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SpendingsDAL\SpendingsDAL.csproj">
       <Project>{38c0e418-80b4-4f86-839a-69ca5b3827bf}</Project>
       <Name>SpendingsDAL</Name>
