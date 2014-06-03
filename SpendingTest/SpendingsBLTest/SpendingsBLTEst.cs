@@ -15,7 +15,6 @@ namespace SpendingTest.SpendingsBL
     {
         Purchase purchaseEntity = new Purchase
         {
-            ID = 1,
             Name = "Bananas",
             Price = 1.23m
         };
@@ -23,28 +22,28 @@ namespace SpendingTest.SpendingsBL
         ISpendingsService spendingsService = new SpendingsService();
 
         [Test]
-        public void AddSpendingTest()
+        public void GetandAddSpendingsTest()
         {
             spendingsService.AddSpending(purchaseEntity);
-        }
 
-        [Test]
-        public void GetSpendingsTest()
-        {
-            List<Purchase> purchasesList = spendingsService.GetSpendings();
-            foreach (Purchase p in purchasesList)
-            {
-                p.ID.Equals(purchaseEntity.ID);
-                p.Name.Equals(purchaseEntity.Name);
-                p.Price.Equals(purchaseEntity.Price);
-            }
+            List<Purchase> purchasesListSaved = spendingsService.GetSpendings();
+            Purchase purchaseexpected = purchasesListSaved[purchasesListSaved.Count - 1];
+            Assert.AreEqual(purchaseexpected.Name, purchaseEntity.Name);
+            Assert.AreEqual(purchaseexpected.Price, purchaseEntity.Price);
         }
         [Test]
         public void DeleteSpendingTest()
-        {
-            spendingsService.DeleteSpending(purchaseEntity.ID);
+        {            
             List<Purchase> purchasesList = spendingsService.GetSpendings();
-            purchasesList.Equals(null);
+            Purchase purchase = purchasesList[purchasesList.Count - 1];
+            spendingsService.DeleteSpending(purchase.ID);
+            purchasesList.Remove(purchase);
+
+            Purchase purchaseexpected = purchasesList[purchasesList.Count - 1];
+            List<Purchase> purchasesListSaved = spendingsService.GetSpendings();
+            Purchase purchasecurrent = purchasesListSaved[purchasesListSaved.Count - 1];
+            Assert.AreEqual(purchaseexpected.Name, purchasecurrent.Name);
+            Assert.AreEqual(purchaseexpected.Price, purchasecurrent.Price);
         }
     }
 }
