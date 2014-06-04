@@ -25,7 +25,6 @@ namespace SpendingsBL.Services
         public void DeleteSpending(int id)
         {
             PurchasesEntities spendingsContext = new PurchasesEntities();
-            //Purchase table = spendingsContext.Purchases;
 
             Purchase purchase = spendingsContext.Purchases.Find(id);
 

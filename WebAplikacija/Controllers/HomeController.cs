@@ -12,14 +12,19 @@ namespace WebAplikacija.Controllers
 {
     public class HomeController : Controller
     {
+        private ISpendingsService _SpendingsService;
+
+        public HomeController (ISpendingsService SpendingsService)
+        {
+            _SpendingsService = SpendingsService;
+        }
+
         [HttpGet]
         public ActionResult Index()
         {
-            ISpendingsService spendingsService = new SpendingsService();
-
             Purchases purchases = new Purchases();
 
-            purchases.PurchasesList = spendingsService.GetSpendings();
+            purchases.PurchasesList = _SpendingsService.GetSpendings();
 
             return View(purchases);
         }
@@ -27,21 +32,18 @@ namespace WebAplikacija.Controllers
         [HttpPost]
         public ActionResult Index(Purchases purchases)
         {
-            ISpendingsService spendingsService = new SpendingsService();
-
-            spendingsService.AddSpending(purchases.Purchase);
-            purchases.PurchasesList = spendingsService.GetSpendings();
+            _SpendingsService.AddSpending(purchases.Purchase);
+            purchases.PurchasesList = _SpendingsService.GetSpendings();
             return View(purchases);
         }
 
         public ActionResult Delete(int id)
         {
-            ISpendingsService spendingsService = new SpendingsService();
             Purchases purchases = new Purchases();
 
-            spendingsService.DeleteSpending(id);
+            _SpendingsService.DeleteSpending(id);
 
-            purchases.PurchasesList = spendingsService.GetSpendings();
+            purchases.PurchasesList = _SpendingsService.GetSpendings();
             return View("Index", purchases);
         }
 
