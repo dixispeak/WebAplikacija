@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewBag.Title = "Indext";
+}
+
+@model WebAplikacija.Models.PurchasesModel
+
+<div class="col-md-offset-4">
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label col-md-2">Jūsų pirkinių sąrašas:</label>
+            <ul class="list-group col-md-4">
+                @if (Model.PurchasesList != null)
+                {
+                    foreach (var el in Model.PurchasesList)
+                    {
+                        <li class="list-group-item" id=@el.ID>
+                            @el.Name - @el.Price Lt
+                            <a href="@Url.Action("Edit", "Home", new { id = @el.ID })" class="btn badge">Edit</a>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+    </div> 
+    <div class="col-md-offset-2">
+        @Html.ActionLink("Pradinis puslapis", "Index")
+    </div>
+</div>

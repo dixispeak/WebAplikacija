@@ -54,11 +54,27 @@ namespace WebAplikacija.Controllers
             return View();
         }
 
-        // public ActionResult PurchaseList()
-        //{
-        //    PurchasesModel purchases = new PurchasesModel();
-        //    purchases.PurchasesList = _SpendingsService.GetSpendings();
-        //    return View(purchases);
-        //}
+        public ActionResult PurchasesList()
+        {
+            PurchasesModel purchases = new PurchasesModel();
+            purchases.PurchasesList = _SpendingsService.GetSpendings();
+            return View("PurchasesList", purchases);
+        }
+
+        public ActionResult Edit(int id)
+        {
+            PurchasesModel purchases = new PurchasesModel();
+            purchases.Purchase = _SpendingsService.FindSpending(id);
+            return View(purchases);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(PurchasesModel purchases)
+        {
+            _SpendingsService.EditSpendings(purchases.Purchase);
+            purchases.PurchasesList = _SpendingsService.GetSpendings();
+
+            return View("PurchasesList", purchases);
+        }
     }
 }

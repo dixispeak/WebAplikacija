@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -26,7 +27,7 @@ namespace SpendingsBL.Services
         {
             PurchasesEntities spendingsContext = new PurchasesEntities();
 
-            Purchase purchase = spendingsContext.Purchases.Find(id);
+            Purchase purchase = FindSpending(id);
 
             spendingsContext.Purchases.Remove(purchase);
 
@@ -39,6 +40,22 @@ namespace SpendingsBL.Services
 
             spendingsContext.Purchases.Add(purchase);
             spendingsContext.SaveChanges();
+        }
+
+        public void EditSpendings(Purchase purchase)
+        {
+            PurchasesEntities spendingsContext = new PurchasesEntities();
+            spendingsContext.Entry(purchase).State = EntityState.Modified;
+            spendingsContext.SaveChanges();
+        }
+
+        public Purchase FindSpending(int id)
+        {
+            PurchasesEntities spendingsContext = new PurchasesEntities();
+
+            Purchase purchase = spendingsContext.Purchases.Find(id);
+
+            return purchase;
         }
     }
 }

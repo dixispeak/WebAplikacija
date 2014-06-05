@@ -13,5 +13,7 @@ namespace SpendingsBL.Interfaces
         List<Purchase> GetSpendings();
         void DeleteSpending(int id);
         void AddSpending(Purchase purchase);
+        void EditSpendings(Purchase purchase);
+        Purchase FindSpending(int id);
     }
 }
