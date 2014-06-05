@@ -8,7 +8,7 @@ using SpendingsDAL;
 
 namespace WebAplikacija.Models
 {
-    public class Purchases
+    public class PurchasesModel
     {
         public Purchase Purchase { get; set; }
         public List<Purchase> PurchasesList { get; set; }

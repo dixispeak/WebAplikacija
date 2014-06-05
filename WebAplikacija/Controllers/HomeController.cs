@@ -22,7 +22,7 @@ namespace WebAplikacija.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            Purchases purchases = new Purchases();
+            PurchasesModel purchases = new PurchasesModel();
 
             purchases.PurchasesList = _SpendingsService.GetSpendings();
 
@@ -30,7 +30,7 @@ namespace WebAplikacija.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(Purchases purchases)
+        public ActionResult Index(PurchasesModel purchases)
         {
             _SpendingsService.AddSpending(purchases.Purchase);
             purchases.PurchasesList = _SpendingsService.GetSpendings();
@@ -39,7 +39,7 @@ namespace WebAplikacija.Controllers
 
         public ActionResult Delete(int id)
         {
-            Purchases purchases = new Purchases();
+            PurchasesModel purchases = new PurchasesModel();
 
             _SpendingsService.DeleteSpending(id);
 
@@ -54,6 +54,11 @@ namespace WebAplikacija.Controllers
             return View();
         }
 
-        
+        // public ActionResult PurchaseList()
+        //{
+        //    PurchasesModel purchases = new PurchasesModel();
+        //    purchases.PurchasesList = _SpendingsService.GetSpendings();
+        //    return View(purchases);
+        //}
     }
 }
