@@ -52,14 +52,7 @@ namespace WebAplikacija.Controllers
             ViewBag.Message = "Your application description page.";
 
             return View();
-        }
-
-        public ActionResult PurchasesList()
-        {
-            PurchasesModel purchases = new PurchasesModel();
-            purchases.PurchasesList = _SpendingsService.GetSpendings();
-            return View("PurchasesList", purchases);
-        }
+        }       
 
         public ActionResult Edit(int id)
         {
@@ -74,7 +67,7 @@ namespace WebAplikacija.Controllers
             _SpendingsService.EditSpendings(purchases.Purchase);
             purchases.PurchasesList = _SpendingsService.GetSpendings();
 
-            return View("PurchasesList", purchases);
+            return View("Index", purchases);
         }
     }
 }

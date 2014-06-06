@@ -87,21 +87,12 @@
                         {
                             <li class="list-group-item" id=@el.ID>
                                 @el.Name - @el.Price Lt
-                                <a href="@Url.Action("Delete", "Home", new { id = @el.ID })" class="btn badge">
-                                    &times;
-                                </a>
+                                <a href="@Url.Action("Delete", "Home", new { id = @el.ID })" class="btn badge">&times;</a>
+                                <a href="@Url.Action("Edit", "Home", new { id = @el.ID })" class="btn badge">Edit</a>
                             </li>
                         }
                     }
                 </ul>
             </div>
-        }
-    @using (Html.BeginForm("PurchasesList", "Home", FormMethod.Post, new { @class = "form-horizontal" }))
-    { 
-        <div class="form-group">
-            <div class="col-md-offset-2">
-                <input type="submit" class="btn" title="changeBtn" value="Redaguoti sąrašą" />
-            </div>
-        </div>
-    }
+        }    
 </div>

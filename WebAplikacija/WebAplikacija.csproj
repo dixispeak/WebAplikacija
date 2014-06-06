@@ -247,7 +247,6 @@
     <Content Include="Views\Account\Manage.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Home\PurchasesList.cshtml" />
     <Content Include="Views\Home\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
