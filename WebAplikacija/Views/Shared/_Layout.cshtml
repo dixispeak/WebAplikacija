@@ -8,7 +8,20 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
+    <div>
+        <div>
+            <nav class="navbar navbar-default" role="navigation">
+                <section id="login">
+                    @Html.Partial("_LoginPartial")
+                </section>
+            </nav>
+        </div>
+    </div>
+
+    @RenderSection("featured", required: false)
+    <section class="content-wrapper main-content clear-fix">
         @RenderBody()
+    </section>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)

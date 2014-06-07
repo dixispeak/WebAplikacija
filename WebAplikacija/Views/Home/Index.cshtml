@@ -60,13 +60,14 @@
 </script>
 
 
-
-<div class="col-md-offset-4">
-        @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "form-horizontal", onsubmit = "return checkTextBox();"})) 
+@section featured {
+<section class="featured">
+    <div class="col-md-offset-4 content-wrapper">
+        @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "form-horizontal", onsubmit = "return checkTextBox();" }))
         {
             <div class="form-group">
                 <label class="col-md-2 control-label">Įveskite pirkinį:</label>
-                @Html.TextBoxFor(m => m.Purchase.Name, new { @class = "form-control col-md-4", id="TextBoxName" })
+                @Html.TextBoxFor(m => m.Purchase.Name, new { @class = "form-control col-md-4", id = "TextBoxName" })
             </div>
             <div class="form-group">
                 <label class="col-md-2 control-label">Pirkinio kaina:</label>
@@ -94,5 +95,8 @@
                     }
                 </ul>
             </div>
-        }    
-</div>
+        }
+    </div>
+
+</section>
+    }

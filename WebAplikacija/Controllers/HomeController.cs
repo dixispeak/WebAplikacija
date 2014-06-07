@@ -10,6 +10,7 @@ using WebAplikacija.Models;
 
 namespace WebAplikacija.Controllers
 {
+    [RequireHttps]
     public class HomeController : Controller
     {
         private ISpendingsService _SpendingsService;
