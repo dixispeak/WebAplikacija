@@ -21,6 +21,7 @@ namespace WebAplikacija.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult Index()
         {
             PurchasesModel purchases = new PurchasesModel();
@@ -31,6 +32,7 @@ namespace WebAplikacija.Controllers
         }
 
         [HttpPost]
+        [AcceptVerbs(HttpVerbs.Post), Authorize]
         public ActionResult Index(PurchasesModel purchases)
         {
             _SpendingsService.AddSpending(purchases.Purchase);
