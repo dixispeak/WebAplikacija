@@ -1,0 +1,44 @@
+﻿@model WebAplikacija.Models.MonthlyBillsModel
+
+@{
+    ViewBag.Title = "Koreguoti";
+}
+
+<h2>Koreguoti mėnesio sąskaitą</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.Bill.MonthlyBillID)
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">Sąskaitos aprašymas:</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Bill.Description)
+                @Html.ValidationMessageFor(model => model.Bill.Description)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">Ar jau sumokėta?</label> 
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Bill.IsDone)
+                @Html.ValidationMessageFor(model => model.Bill.IsDone)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Išsaugoti pakeitimus" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Grįžti į mėnesinių sąskaitų sąrašą", "Index")
+</div>

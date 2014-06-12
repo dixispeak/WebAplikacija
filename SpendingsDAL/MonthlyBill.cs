@@ -12,10 +12,10 @@ namespace SpendingsDAL
     using System;
     using System.Collections.Generic;
     
-    public partial class Purchase
+    public partial class MonthlyBill
     {
-        public int PurchaseID { get; set; }
-        public string Name { get; set; }
-        public decimal Price { get; set; }
+        public int MonthlyBillID { get; set; }
+        public string Description { get; set; }
+        public bool IsDone { get; set; }
     }
 }

@@ -1,0 +1,125 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+@model WebAplikacija.Models.PurchasesModel
+
+<script type="text/javascript">
+    function jsDecimals(e) {
+        var evt = (e) ? e : window.event;
+        var key = (evt.keyCode) ? evt.keyCode : evt.which;
+        if (key != null) {
+            key = parseInt(key, 10);
+            if ((key < 48 || key > 57) && (key < 96 || key > 105)) {
+                if (!jsIsUserFriendlyChar(key, "Decimals")) {
+                    return false;
+                }
+            }
+            else {
+                if (evt.shiftKey) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    // Function to check for user friendly keys
+    //------------------------------------------
+    function jsIsUserFriendlyChar(val, step) {
+        // Backspace, Tab, Enter, Insert, and Delete
+        if (val == 8 || val == 9 || val == 13 || val == 45 || val == 46) {
+            return true;
+        }
+        // Ctrl, Alt, CapsLock, Home, End, and Arrows
+        if ((val > 16 && val < 21) || (val > 34 && val < 41)) {
+            return true;
+        }
+        if (step == "Decimals") {
+            if (val == 190 || val == 110) {  //Check dot key code should be allowed
+                return true;
+            }
+        }
+        // The rest
+        return false;
+    }
+
+    function checkTextBox() {
+        var textboxName = document.getElementById("TextBoxName");
+        var textboxPrice = document.getElementById("TextBoxPrice");
+
+        if (!textboxName.value || !textboxPrice.value) {
+            alert("Nevisi laukeliai užpildyti");
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+</script>
+
+@section featured {
+    <section id="monthly">
+        <div class="panel panel-defaul col-md-offset-4">
+            <div class="page-header">Šio mėnesio nesumokėti mokesčiai:</div>
+            <div class="checkbox panel-body">
+                <label>
+                    <input type="checkbox" value="">
+                    Sumokėti už butą
+                </label>
+            </div>
+            <div class="checkbox panel-body">
+                <label>
+                    <input type="checkbox" value="">
+                    Sumokėti už telefoną
+                </label>
+            </div>
+            <div class="checkbox panel-body">
+                <label>
+                    <input type="checkbox" value="">
+                    Sumokėti už internetą
+                </label>
+            </div>
+        </div>
+    </section>
+
+    <section class="featured" id="purchasesList">
+        <div>
+            @using (Html.BeginForm("Index", "Purchases", FormMethod.Post, new { @class = "form-horizontal", onsubmit = "return checkTextBox();" }))
+            {
+                <div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Įveskite pirkinį:</label>
+                        @Html.TextBoxFor(m => m.Purchase.Name, new { @class = "form-control col-md-4", id = "TextBoxName" })
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Pirkinio kaina:</label>
+                        @Html.TextBoxFor(m => m.Purchase.Price, new { @class = "form-control col-md-4", onkeydown = "return jsDecimals(event);", id = "TextBoxPrice" })
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2">
+                            <input type="submit" class="btn btn-default" title="saveBtn" value="Įtraukti į sąrašą" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2">Jūsų pirkinių sąrašas:</label>
+                    <ul class="list-group col-md-4">
+                        @if (Model.PurchasesList != null)
+                        {
+                            foreach (var el in Model.PurchasesList)
+                            {
+                                <li class="list-group-item" id=@el.PurchaseID>
+                                    @el.Name - @el.Price Lt
+                                    <a href="@Url.Action("Delete", "Purchases", new { id = @el.PurchaseID })" class="btn badge">&times;</a>
+                                    <a href="@Url.Action("Edit", "Purchases", new { id = @el.PurchaseID })" class="btn badge">Koreguoti</a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+    </section>
+}
+

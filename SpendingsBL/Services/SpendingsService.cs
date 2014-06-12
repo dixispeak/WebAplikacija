@@ -46,7 +46,6 @@ namespace SpendingsBL.Services
         public Purchase FindSpending(int id)
         {
             Purchase purchase = spendingsContext.Purchases.Find(id);
-
             return purchase;
         }
     }

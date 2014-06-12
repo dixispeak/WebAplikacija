@@ -85,7 +85,7 @@ namespace WebAplikacija.Controllers
                 if (result.Succeeded)
                 {
                     await SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Purchases");
                 }
                 else
                 {
@@ -292,7 +292,7 @@ namespace WebAplikacija.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Purchases");
         }
 
         //
@@ -374,7 +374,7 @@ namespace WebAplikacija.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Purchases");
             }
         }
 

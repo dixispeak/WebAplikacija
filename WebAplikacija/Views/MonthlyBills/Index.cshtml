@@ -1,0 +1,39 @@
+﻿@model WebAplikacija.Models.MonthlyBillsModel
+
+@{
+    ViewBag.Title = "Mėnesio sąskaitos";
+}
+
+<h2>Mėnesio sąskaitos</h2>
+
+<p>
+    @Html.ActionLink("Sukurti nauja sąskaitą", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Sąskaitos aprašymas
+        </th>
+        <th>
+            Būsena
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.MonthlyBillsList)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsDone)
+            </td>
+            <td>
+                <a href="@Url.Action("Edit", new { id = item.MonthlyBillID })" class="btn badge">Koreguoti</a>
+                <a href="@Url.Action("Details", new { id = item.MonthlyBillID })" class="btn badge">Detaliau</a>
+                <a href="@Url.Action("Delete", new { id = item.MonthlyBillID })" class="btn badge">&times;</a>
+            </td>
+        </tr>
+    }
+</table>

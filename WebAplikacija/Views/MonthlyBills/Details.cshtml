@@ -1,0 +1,33 @@
+﻿@model WebAplikacija.Models.MonthlyBillsModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Detaliau mėnesio sąskaita</h2>
+
+<div>
+	<hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Sąskaitos aprašymas:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Bill.Description)
+        </dd>
+
+        <dt>
+            Ar jau įvykdyta?
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Bill.IsDone)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Koreguoti", "Edit", new { id = Model.Bill.MonthlyBillID }) |
+    @Html.ActionLink("Grįžti į mėnesinių sąskaitų sąrašą", "Index")
+</p>

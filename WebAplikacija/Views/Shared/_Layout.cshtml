@@ -8,20 +8,34 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    <div>
-        <div>
-            <nav class="navbar navbar-default" role="navigation">
-                <section id="login">
+    <header class="navbar navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Pagrindinis puslapis", "Index", "Purchases")</li>
+                    <li>@Html.ActionLink("Mėnesio sąskaitos", "Index", "MonthlyBills")</li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
                     @Html.Partial("_LoginPartial")
-                </section>
-            </nav>
+                </ul>
+            </div>
         </div>
+    </header>
+    <div>        
+        <div class="container">
+            @RenderSection("featured", required: false)
+        <section class="content-wrapper main-content clear-fix">
+            @RenderBody()
+        </section>
     </div>
-
-    @RenderSection("featured", required: false)
-    <section class="content-wrapper main-content clear-fix">
-        @RenderBody()
-    </section>
+    </div>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)

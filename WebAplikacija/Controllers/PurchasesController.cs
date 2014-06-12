@@ -11,17 +11,17 @@ using WebAplikacija.Models;
 namespace WebAplikacija.Controllers
 {
     [RequireHttps]
-    public class HomeController : Controller
+    [Authorize]
+    public class PurchasesController : Controller
     {
         private ISpendingsService _SpendingsService;
 
-        public HomeController (ISpendingsService SpendingsService)
+        public PurchasesController (ISpendingsService SpendingsService)
         {
             _SpendingsService = SpendingsService;
         }
 
         [HttpGet]
-        [Authorize]
         public ActionResult Index()
         {
             PurchasesModel purchases = new PurchasesModel();
@@ -32,7 +32,6 @@ namespace WebAplikacija.Controllers
         }
 
         [HttpPost]
-        [AcceptVerbs(HttpVerbs.Post), Authorize]
         public ActionResult Index(PurchasesModel purchases)
         {
             _SpendingsService.AddSpending(purchases.Purchase);

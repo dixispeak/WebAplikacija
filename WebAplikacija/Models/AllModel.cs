@@ -13,4 +13,10 @@ namespace WebAplikacija.Models
         public Purchase Purchase { get; set; }
         public List<Purchase> PurchasesList { get; set; }
     }
+
+    public class MonthlyBillsModel
+    {
+        public MonthlyBill Bill { get; set; }
+        public List<MonthlyBill> MonthlyBillsList { get; set; }
+    }
 }

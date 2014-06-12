@@ -36,7 +36,7 @@ namespace SpendingTest.SpendingsBL
         {            
             List<Purchase> purchasesList = spendingsService.GetSpendings();
             Purchase purchase = purchasesList[purchasesList.Count - 1];
-            spendingsService.DeleteSpending(purchase.ID);
+            spendingsService.DeleteSpending(purchase.PurchaseID);
             purchasesList.Remove(purchase);
 
             Purchase purchaseexpected = purchasesList[purchasesList.Count - 1];

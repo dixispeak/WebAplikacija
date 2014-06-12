@@ -1,0 +1,39 @@
+﻿@model WebAplikacija.Models.MonthlyBillsModel
+
+@{
+    ViewBag.Title = "Pašalinti";
+}
+
+<h2>Pašalinti mėnesio sąskaitą</h2>
+
+<h3>Ar tikrai norite pašalinti?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Sąskaitos aprašymas:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Bill.Description)
+        </dd>
+
+        <dt>
+            Būsena:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Bill.IsDone)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Pašalinti" class="btn btn-default" /> |
+            @Html.ActionLink("Grįžti į mėnesinių sąskaitų sąrašą", "Index")
+        </div>
+    }
+</div>

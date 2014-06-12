@@ -64,6 +64,7 @@ namespace WebAplikacija.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Bind<ISpendingsService>().To<SpendingsService>();
+            kernel.Bind<IMonthlyBillsService>().To<MonthlyBillsService>();
         }        
     }
 }
