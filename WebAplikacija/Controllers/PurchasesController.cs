@@ -30,7 +30,7 @@ namespace WebAplikacija.Controllers
             MonthlyBillsModel monthlyBillsModel = new MonthlyBillsModel();
 
             purchasesModel.PurchasesList = _SpendingsService.GetSpendings();
-            monthlyBillsModel.MonthlyBillsList = _MonthlyBillsService.GetMonthlyBills();
+            monthlyBillsModel.MonthlyBillsList = _MonthlyBillsService.GetNotPayedMonthlyBills(DateTime.Today);
 
             PurchasesMonthlyBillsModel purchasesMonthlyBills = new PurchasesMonthlyBillsModel
             { 
@@ -48,9 +48,26 @@ namespace WebAplikacija.Controllers
             purchasesMonthlyBills.PurchasesModel.PurchasesList = _SpendingsService.GetSpendings();
 
             MonthlyBillsModel monthlyBillsModel = new MonthlyBillsModel();
-            monthlyBillsModel.MonthlyBillsList = _MonthlyBillsService.GetMonthlyBills();
+            var now = DateTime.Now;
+            var today = new DateTime(now.Year, now.Month, 1);
+            monthlyBillsModel.MonthlyBillsList = _MonthlyBillsService.GetNotPayedMonthlyBills(today);
             purchasesMonthlyBills.MonthlyBillsModel = monthlyBillsModel;
             
+            return View(purchasesMonthlyBills);
+        }
+
+        public ActionResult MonthlyBills(PurchasesMonthlyBillsModel purchasesMonthlyBills)
+        {
+            PurchasesModel purchasesModel = new PurchasesModel();
+            MonthlyBillsModel monthlyBillsModel = new MonthlyBillsModel();
+
+            purchasesModel.PurchasesList = _SpendingsService.GetSpendings();
+
+
+            monthlyBillsModel.MonthlyBillsList = _MonthlyBillsService.GetNotPayedMonthlyBills(DateTime.Today);
+
+            purchasesMonthlyBills.PurchasesModel = purchasesModel;
+            purchasesMonthlyBills.MonthlyBillsModel = monthlyBillsModel;
             return View(purchasesMonthlyBills);
         }
 

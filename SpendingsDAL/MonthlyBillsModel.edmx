@@ -5,7 +5,7 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
       <Schema Namespace="MonthlyBillsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="MonthlyBills">
+        <EntityType Name="MonthlyBill">
           <Key>
             <PropertyRef Name="BillDescriptionID" />
           </Key>
@@ -18,13 +18,13 @@
           </Key>
           <Property Name="PayedBillMonthID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="BillDescriptionID" Type="int" Nullable="false" />
-          <Property Name="PayedBillMonth" Type="date" />
+          <Property Name="PayedBillMonth" Type="date" Nullable="false" />
         </EntityType>
-        <Association Name="FK_PayedBillsMonths_MonthlyBills">
-          <End Role="MonthlyBills" Type="Self.MonthlyBills" Multiplicity="1" />
+        <Association Name="FK_PayedBillsMonths_MonthlyBill">
+          <End Role="MonthlyBill" Type="Self.MonthlyBill" Multiplicity="1" />
           <End Role="PayedBillsMonths" Type="Self.PayedBillsMonths" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="MonthlyBills">
+            <Principal Role="MonthlyBill">
               <PropertyRef Name="BillDescriptionID" />
             </Principal>
             <Dependent Role="PayedBillsMonths">
@@ -33,10 +33,10 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="MonthlyBillsModelStoreContainer">
-          <EntitySet Name="MonthlyBills" EntityType="Self.MonthlyBills" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MonthlyBill" EntityType="Self.MonthlyBill" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PayedBillsMonths" EntityType="Self.PayedBillsMonths" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_PayedBillsMonths_MonthlyBills" Association="Self.FK_PayedBillsMonths_MonthlyBills">
-            <End Role="MonthlyBills" EntitySet="MonthlyBills" />
+          <AssociationSet Name="FK_PayedBillsMonths_MonthlyBill" Association="Self.FK_PayedBillsMonths_MonthlyBill">
+            <End Role="MonthlyBill" EntitySet="MonthlyBill" />
             <End Role="PayedBillsMonths" EntitySet="PayedBillsMonths" />
           </AssociationSet>
         </EntityContainer>
@@ -51,7 +51,7 @@
           </Key>
           <Property Name="BillDescriptionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="BillDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="PayedBillsMonths" Relationship="Self.FK_PayedBillsMonths_MonthlyBills" FromRole="MonthlyBills" ToRole="PayedBillsMonths" />
+          <NavigationProperty Name="PayedBillsMonths" Relationship="Self.FK_PayedBillsMonths_MonthlyBill" FromRole="MonthlyBill" ToRole="PayedBillsMonths" />
         </EntityType>
         <EntityType Name="PayedBillsMonth">
           <Key>
@@ -59,14 +59,14 @@
           </Key>
           <Property Name="PayedBillMonthID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="BillDescriptionID" Type="Int32" Nullable="false" />
-          <Property Name="PayedBillMonth" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="MonthlyBill" Relationship="Self.FK_PayedBillsMonths_MonthlyBills" FromRole="PayedBillsMonths" ToRole="MonthlyBills" />
+          <Property Name="PayedBillMonth" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="MonthlyBill" Relationship="Self.FK_PayedBillsMonths_MonthlyBill" FromRole="PayedBillsMonths" ToRole="MonthlyBill" />
         </EntityType>
-        <Association Name="FK_PayedBillsMonths_MonthlyBills">
-          <End Role="MonthlyBills" Type="Self.MonthlyBill" Multiplicity="1" />
+        <Association Name="FK_PayedBillsMonths_MonthlyBill">
+          <End Role="MonthlyBill" Type="Self.MonthlyBill" Multiplicity="1" />
           <End Role="PayedBillsMonths" Type="Self.PayedBillsMonth" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="MonthlyBills">
+            <Principal Role="MonthlyBill">
               <PropertyRef Name="BillDescriptionID" />
             </Principal>
             <Dependent Role="PayedBillsMonths">
@@ -77,8 +77,8 @@
         <EntityContainer Name="MonthlyBillsEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="MonthlyBills" EntityType="Self.MonthlyBill" />
           <EntitySet Name="PayedBillsMonths" EntityType="Self.PayedBillsMonth" />
-          <AssociationSet Name="FK_PayedBillsMonths_MonthlyBills" Association="Self.FK_PayedBillsMonths_MonthlyBills">
-            <End Role="MonthlyBills" EntitySet="MonthlyBills" />
+          <AssociationSet Name="FK_PayedBillsMonths_MonthlyBill" Association="Self.FK_PayedBillsMonths_MonthlyBill">
+            <End Role="MonthlyBill" EntitySet="MonthlyBills" />
             <End Role="PayedBillsMonths" EntitySet="PayedBillsMonths" />
           </AssociationSet>
         </EntityContainer>
@@ -90,7 +90,7 @@
         <EntityContainerMapping StorageEntityContainer="MonthlyBillsModelStoreContainer" CdmEntityContainer="MonthlyBillsEntities">
           <EntitySetMapping Name="MonthlyBills">
             <EntityTypeMapping TypeName="MonthlyBillsModel.MonthlyBill">
-              <MappingFragment StoreEntitySet="MonthlyBills">
+              <MappingFragment StoreEntitySet="MonthlyBill">
                 <ScalarProperty Name="BillDescriptionID" ColumnName="BillDescriptionID" />
                 <ScalarProperty Name="BillDescription" ColumnName="BillDescription" />
               </MappingFragment>

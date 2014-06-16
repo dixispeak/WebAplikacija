@@ -59,26 +59,28 @@
 
 @section featured {
     <section id="monthly">
-        <div class="panel panel-defaul col-md-offset-4">
-            @if (Model.MonthlyBillsModel.MonthlyBillsList != null)
+        <div class="panel panel-defaul">
+            @using (Html.BeginForm("MonthlyBills", "Purchases", new { @class = "form-horizontal" }))
             {
-            <div class="page-header">Šio mėnesio nesumokėtos sąskaitos:</div>
-            foreach (var monthlyBill in Model.MonthlyBillsModel.MonthlyBillsList)
-            {
-                <div class="checkbox panel-body">
-                    <label>
-                        <input type="checkbox" name="@monthlyBill.BillDescriptionID" value="@monthlyBill.BillDescriptionID">
-                        @monthlyBill.BillDescription                       
-                    </label>
+                if (Model.MonthlyBillsModel.MonthlyBillsList.Count != 0)
+                {
+                    <div class="page-header">Šio mėnesio nesumokėtos sąskaitos:</div>
+                    foreach (var monthlyBill in Model.MonthlyBillsModel.MonthlyBillsList)
+                    {
+                        <div class="checkbox panel-body">
+                            <label>
+                                <input type="checkbox" name="@monthlyBill.BillDescriptionID" value="@monthlyBill.BillDescriptionID">
+                                @monthlyBill.BillDescription
+                            </label>
+                        </div>
+                    }
+                    <div class="form-group">
+                    <div class="col-md-offset-2">
+                        <input type="submit" class="btn btn-default" title="saveBtn" value="Išsaugauti" />
+                    </div>
                 </div>
+                }                
             }
-            }
-            <div class="checkbox panel-body">
-                <label>
-                    <input type="checkbox" value="">
-                    Sumokėti už telefoną
-                </label>
-            </div>
         </div>
     </section>
 

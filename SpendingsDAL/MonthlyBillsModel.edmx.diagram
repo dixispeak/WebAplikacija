@@ -4,10 +4,10 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="968b630e905145fa9d9fd47abdbbd0cc" Name="Diagram1">
+      <Diagram DiagramId="659cf750a0d8416aa0e77681f2577d48" Name="Diagram1">
         <EntityTypeShape EntityType="MonthlyBillsModel.MonthlyBill" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="MonthlyBillsModel.PayedBillsMonth" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
-        <AssociationConnector Association="MonthlyBillsModel.FK_PayedBillsMonths_MonthlyBills" ManuallyRouted="false" />
+        <AssociationConnector Association="MonthlyBillsModel.FK_PayedBillsMonths_MonthlyBill" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -15,9 +15,9 @@ namespace SpendingsBL.Services
 
         public List<MonthlyBill> GetMonthlyBills()
         {
-            List<MonthlyBill> MonthlyBillsList = monthlyBillsContext.MonthlyBills.ToList();
+            List<MonthlyBill> monthlyBillsList = monthlyBillsContext.MonthlyBills.ToList();
 
-            return MonthlyBillsList;
+            return monthlyBillsList;
         }
 
         public void DeleteBill(int id)
@@ -61,6 +61,32 @@ namespace SpendingsBL.Services
                 }
             }
             return isDone;
+        }
+
+        public List<MonthlyBill> GetNotPayedMonthlyBills(DateTime time)
+        {
+            List<MonthlyBill> monthlyBillsList = GetMonthlyBills();
+            List<MonthlyBill> notPayedMonthlyBillsList = new List<MonthlyBill>();
+
+            foreach (MonthlyBill monthlyBill in monthlyBillsList)
+            {
+                if (monthlyBill.PayedBillsMonths.Count != 0)
+                {
+                    foreach (PayedBillsMonth payedBillMonth in monthlyBill.PayedBillsMonths)
+                    {
+                        if (payedBillMonth.PayedBillMonth != time)
+                        {
+                            notPayedMonthlyBillsList.Add(monthlyBill);
+                        }
+                    }
+                }
+                else
+                {
+                    notPayedMonthlyBillsList.Add(monthlyBill);
+                }
+            }
+
+            return notPayedMonthlyBillsList;
         }
     }
 }

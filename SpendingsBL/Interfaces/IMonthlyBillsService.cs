@@ -15,5 +15,6 @@ namespace SpendingsBL.Interfaces
         void EditBill(MonthlyBill purchase);
         MonthlyBill FindBill(int id);
         bool IsPayedBill(int id, System.DateTime time);
+        List<MonthlyBill> GetNotPayedMonthlyBills(DateTime time);
     }
 }

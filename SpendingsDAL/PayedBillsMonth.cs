@@ -16,7 +16,7 @@ namespace SpendingsDAL
     {
         public int PayedBillMonthID { get; set; }
         public int BillDescriptionID { get; set; }
-        public Nullable<System.DateTime> PayedBillMonth { get; set; }
+        public System.DateTime PayedBillMonth { get; set; }
     
         public virtual MonthlyBill MonthlyBill { get; set; }
     }
