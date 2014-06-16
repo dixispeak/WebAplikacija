@@ -14,5 +14,6 @@ namespace SpendingsBL.Interfaces
         void AddBill(MonthlyBill purchase);
         void EditBill(MonthlyBill purchase);
         MonthlyBill FindBill(int id);
+        bool IsPayedBill(int id, System.DateTime time);
     }
 }

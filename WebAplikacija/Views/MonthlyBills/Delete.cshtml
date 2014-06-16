@@ -15,17 +15,8 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Bill.Description)
+            @Html.DisplayFor(model => model.Bill.BillDescription)
         </dd>
-
-        <dt>
-            Būsena:
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Bill.IsDone)
-        </dd>
-
     </dl>
 
     @using (Html.BeginForm()) {

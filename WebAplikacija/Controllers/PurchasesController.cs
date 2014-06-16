@@ -15,28 +15,43 @@ namespace WebAplikacija.Controllers
     public class PurchasesController : Controller
     {
         private ISpendingsService _SpendingsService;
+        private IMonthlyBillsService _MonthlyBillsService;
 
-        public PurchasesController (ISpendingsService SpendingsService)
+        public PurchasesController(ISpendingsService SpendingsService, IMonthlyBillsService MonthlyBillsService)
         {
             _SpendingsService = SpendingsService;
+            _MonthlyBillsService = MonthlyBillsService;
         }
 
         [HttpGet]
         public ActionResult Index()
         {
-            PurchasesModel purchases = new PurchasesModel();
+            PurchasesModel purchasesModel = new PurchasesModel();
+            MonthlyBillsModel monthlyBillsModel = new MonthlyBillsModel();
 
-            purchases.PurchasesList = _SpendingsService.GetSpendings();
+            purchasesModel.PurchasesList = _SpendingsService.GetSpendings();
+            monthlyBillsModel.MonthlyBillsList = _MonthlyBillsService.GetMonthlyBills();
 
-            return View(purchases);
+            PurchasesMonthlyBillsModel purchasesMonthlyBills = new PurchasesMonthlyBillsModel
+            { 
+                PurchasesModel = purchasesModel,
+                MonthlyBillsModel = monthlyBillsModel
+            };
+
+            return View(purchasesMonthlyBills);
         }
 
         [HttpPost]
-        public ActionResult Index(PurchasesModel purchases)
+        public ActionResult Index(PurchasesMonthlyBillsModel purchasesMonthlyBills)
         {
-            _SpendingsService.AddSpending(purchases.Purchase);
-            purchases.PurchasesList = _SpendingsService.GetSpendings();
-            return View(purchases);
+            _SpendingsService.AddSpending(purchasesMonthlyBills.PurchasesModel.Purchase);
+            purchasesMonthlyBills.PurchasesModel.PurchasesList = _SpendingsService.GetSpendings();
+
+            MonthlyBillsModel monthlyBillsModel = new MonthlyBillsModel();
+            monthlyBillsModel.MonthlyBillsList = _MonthlyBillsService.GetMonthlyBills();
+            purchasesMonthlyBills.MonthlyBillsModel = monthlyBillsModel;
+            
+            return View(purchasesMonthlyBills);
         }
 
         public ActionResult Delete(int id)

@@ -36,10 +36,6 @@ namespace WebAplikacija.Controllers
         public ActionResult Details(int id)
         {
             MonthlyBillsModel monthlyBills = new MonthlyBillsModel();
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             monthlyBills.Bill = _MonthlyBillsService.FindBill(id);
             if (monthlyBills.Bill == null)
             {
@@ -73,10 +69,6 @@ namespace WebAplikacija.Controllers
         // GET: /MonthlyBills/Edit/5
         public ActionResult Edit(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             MonthlyBillsModel monthlyBills = new MonthlyBillsModel();
             monthlyBills.Bill = _MonthlyBillsService.FindBill(id);
             if (monthlyBills == null)
@@ -104,10 +96,6 @@ namespace WebAplikacija.Controllers
         // GET: /MonthlyBills/Delete/5
         public ActionResult Delete(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             MonthlyBillsModel monthlyBills = new MonthlyBillsModel();
             monthlyBills.Bill = _MonthlyBillsService.FindBill(id);
             if (monthlyBills == null)

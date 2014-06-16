@@ -17,16 +17,8 @@
         <div class="form-group">
             <label class="col-md-2 control-label">Sąskaitos aprašymas:</label>
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Bill.Description)
-                @Html.ValidationMessageFor(model => model.Bill.Description)
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-md-2 control-label">Ar jau sumokėta?</label>            
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Bill.IsDone)
-                @Html.ValidationMessageFor(model => model.Bill.IsDone)
+                @Html.EditorFor(model => model.Bill.BillDescription)
+                @Html.ValidationMessageFor(model => model.Bill.BillDescription)
             </div>
         </div>
 

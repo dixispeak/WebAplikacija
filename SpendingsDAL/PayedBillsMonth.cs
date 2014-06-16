@@ -12,16 +12,12 @@ namespace SpendingsDAL
     using System;
     using System.Collections.Generic;
     
-    public partial class MonthlyBill
+    public partial class PayedBillsMonth
     {
-        public MonthlyBill()
-        {
-            this.PayedBillsMonths = new HashSet<PayedBillsMonth>();
-        }
-    
+        public int PayedBillMonthID { get; set; }
         public int BillDescriptionID { get; set; }
-        public string BillDescription { get; set; }
+        public Nullable<System.DateTime> PayedBillMonth { get; set; }
     
-        public virtual ICollection<PayedBillsMonth> PayedBillsMonths { get; set; }
+        public virtual MonthlyBill MonthlyBill { get; set; }
     }
 }

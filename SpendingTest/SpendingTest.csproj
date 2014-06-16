@@ -66,7 +66,7 @@
       <Name>SpendingsBL</Name>
     </ProjectReference>
     <ProjectReference Include="..\SpendingsDAL\SpendingsDAL.csproj">
-      <Project>{31020b57-f0bf-42f8-9e1d-c7e12b66d517}</Project>
+      <Project>{59c1081d-8b40-49bc-95d7-ff65106c554d}</Project>
       <Name>SpendingsDAL</Name>
     </ProjectReference>
   </ItemGroup>

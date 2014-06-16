@@ -9,7 +9,7 @@ using SpendingsDAL;
 
 namespace SpendingsBL.Services
 {
-    public class MonthlyBillsService: IMonthlyBillsService
+    public class MonthlyBillsService : IMonthlyBillsService
     {
         private MonthlyBillsEntities monthlyBillsContext = new MonthlyBillsEntities();
 
@@ -45,6 +45,22 @@ namespace SpendingsBL.Services
         {
             MonthlyBill bill = monthlyBillsContext.MonthlyBills.Find(id);
             return bill;
+        }
+
+
+        public bool IsPayedBill(int id, DateTime time)
+        {
+            MonthlyBill bill = monthlyBillsContext.MonthlyBills.Find(id);
+            bool isDone = false;
+
+            foreach (PayedBillsMonth payedBillMonth in bill.PayedBillsMonths)
+            {
+                if (payedBillMonth.PayedBillMonth == time)
+                {
+                    isDone = true;
+                }
+            }
+            return isDone;
         }
     }
 }

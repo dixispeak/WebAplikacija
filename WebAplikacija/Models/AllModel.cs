@@ -19,4 +19,24 @@ namespace WebAplikacija.Models
         public MonthlyBill Bill { get; set; }
         public List<MonthlyBill> MonthlyBillsList { get; set; }
     }
+
+    public class PurchasesMonthlyBillsModel
+    {
+        public MonthlyBillsModel MonthlyBillsModel { get; set; }
+        public PurchasesModel PurchasesModel { get; set; }
+    }
+
+    public class Bill 
+    {
+        public int BillDescriptionID { get; set; }
+        public string BillDescription { get; set; }
+        public bool IsDone { get; set; }
+
+        public Bill(int billDescriptionID, string billDescription, bool isDone)
+        {
+            BillDescriptionID = billDescriptionID;
+            BillDescription = billDescription;
+            IsDone = isDone;
+        }
+    }
 }

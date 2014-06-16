@@ -7,27 +7,30 @@
 <h2>Detaliau mėnesio sąskaita</h2>
 
 <div>
-	<hr />
+    <hr />
     <dl class="dl-horizontal">
         <dt>
             Sąskaitos aprašymas:
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Bill.Description)
+            @Html.DisplayFor(model => model.Bill.BillDescription)
         </dd>
-
-        <dt>
-            Ar jau įvykdyta?
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Bill.IsDone)
-        </dd>
-
+        @if (Model.Bill.PayedBillsMonths.Count != 0)
+        {
+            <dt>
+                Sumokėta už šiuos mėnesius:
+            </dt>
+            foreach (var month in Model.Bill.PayedBillsMonths)
+            {
+                <dd>
+                    month;
+                </dd>
+            }
+        }
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Koreguoti", "Edit", new { id = Model.Bill.MonthlyBillID }) |
+    @Html.ActionLink("Koreguoti", "Edit", new { id = Model.Bill.BillDescriptionID }) |
     @Html.ActionLink("Grįžti į mėnesinių sąskaitų sąrašą", "Index")
 </p>

@@ -26,5 +26,6 @@ namespace SpendingsDAL
         }
     
         public virtual DbSet<MonthlyBill> MonthlyBills { get; set; }
+        public virtual DbSet<PayedBillsMonth> PayedBillsMonths { get; set; }
     }
 }

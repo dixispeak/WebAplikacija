@@ -7,14 +7,38 @@
       <Schema Namespace="MonthlyBillsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="MonthlyBills">
           <Key>
-            <PropertyRef Name="MonthlyBillID" />
+            <PropertyRef Name="BillDescriptionID" />
           </Key>
-          <Property Name="MonthlyBillID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Description" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="IsDone" Type="bit" Nullable="false" />
+          <Property Name="BillDescriptionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BillDescription" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <EntityType Name="PayedBillsMonths">
+          <Key>
+            <PropertyRef Name="PayedBillMonthID" />
+          </Key>
+          <Property Name="PayedBillMonthID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BillDescriptionID" Type="int" Nullable="false" />
+          <Property Name="PayedBillMonth" Type="date" />
+        </EntityType>
+        <Association Name="FK_PayedBillsMonths_MonthlyBills">
+          <End Role="MonthlyBills" Type="Self.MonthlyBills" Multiplicity="1" />
+          <End Role="PayedBillsMonths" Type="Self.PayedBillsMonths" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MonthlyBills">
+              <PropertyRef Name="BillDescriptionID" />
+            </Principal>
+            <Dependent Role="PayedBillsMonths">
+              <PropertyRef Name="BillDescriptionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="MonthlyBillsModelStoreContainer">
           <EntitySet Name="MonthlyBills" EntityType="Self.MonthlyBills" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PayedBillsMonths" EntityType="Self.PayedBillsMonths" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_PayedBillsMonths_MonthlyBills" Association="Self.FK_PayedBillsMonths_MonthlyBills">
+            <End Role="MonthlyBills" EntitySet="MonthlyBills" />
+            <End Role="PayedBillsMonths" EntitySet="PayedBillsMonths" />
+          </AssociationSet>
         </EntityContainer>
       </Schema>
     </edmx:StorageModels>
@@ -23,14 +47,40 @@
       <Schema Namespace="MonthlyBillsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="MonthlyBill">
           <Key>
-            <PropertyRef Name="MonthlyBillID" />
+            <PropertyRef Name="BillDescriptionID" />
           </Key>
-          <Property Name="MonthlyBillID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="IsDone" Type="Boolean" Nullable="false" />
+          <Property Name="BillDescriptionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BillDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="PayedBillsMonths" Relationship="Self.FK_PayedBillsMonths_MonthlyBills" FromRole="MonthlyBills" ToRole="PayedBillsMonths" />
         </EntityType>
+        <EntityType Name="PayedBillsMonth">
+          <Key>
+            <PropertyRef Name="PayedBillMonthID" />
+          </Key>
+          <Property Name="PayedBillMonthID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BillDescriptionID" Type="Int32" Nullable="false" />
+          <Property Name="PayedBillMonth" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="MonthlyBill" Relationship="Self.FK_PayedBillsMonths_MonthlyBills" FromRole="PayedBillsMonths" ToRole="MonthlyBills" />
+        </EntityType>
+        <Association Name="FK_PayedBillsMonths_MonthlyBills">
+          <End Role="MonthlyBills" Type="Self.MonthlyBill" Multiplicity="1" />
+          <End Role="PayedBillsMonths" Type="Self.PayedBillsMonth" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MonthlyBills">
+              <PropertyRef Name="BillDescriptionID" />
+            </Principal>
+            <Dependent Role="PayedBillsMonths">
+              <PropertyRef Name="BillDescriptionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="MonthlyBillsEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="MonthlyBills" EntityType="Self.MonthlyBill" />
+          <EntitySet Name="PayedBillsMonths" EntityType="Self.PayedBillsMonth" />
+          <AssociationSet Name="FK_PayedBillsMonths_MonthlyBills" Association="Self.FK_PayedBillsMonths_MonthlyBills">
+            <End Role="MonthlyBills" EntitySet="MonthlyBills" />
+            <End Role="PayedBillsMonths" EntitySet="PayedBillsMonths" />
+          </AssociationSet>
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
@@ -41,9 +91,17 @@
           <EntitySetMapping Name="MonthlyBills">
             <EntityTypeMapping TypeName="MonthlyBillsModel.MonthlyBill">
               <MappingFragment StoreEntitySet="MonthlyBills">
-                <ScalarProperty Name="MonthlyBillID" ColumnName="MonthlyBillID" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="IsDone" ColumnName="IsDone" />
+                <ScalarProperty Name="BillDescriptionID" ColumnName="BillDescriptionID" />
+                <ScalarProperty Name="BillDescription" ColumnName="BillDescription" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PayedBillsMonths">
+            <EntityTypeMapping TypeName="MonthlyBillsModel.PayedBillsMonth">
+              <MappingFragment StoreEntitySet="PayedBillsMonths">
+                <ScalarProperty Name="PayedBillMonthID" ColumnName="PayedBillMonthID" />
+                <ScalarProperty Name="BillDescriptionID" ColumnName="BillDescriptionID" />
+                <ScalarProperty Name="PayedBillMonth" ColumnName="PayedBillMonth" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
