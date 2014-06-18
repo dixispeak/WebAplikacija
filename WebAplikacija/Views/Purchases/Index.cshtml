@@ -60,7 +60,7 @@
 @section featured {
     <section id="monthly">
         <div class="panel panel-defaul">
-            @using (Html.BeginForm("MonthlyBills", "Purchases", new { @class = "form-horizontal" }))
+            @using (Html.BeginForm("MonthlyBills", "Purchases", FormMethod.Post, new { @class = "form-horizontal" }))
             {
                 if (Model.MonthlyBillsModel.MonthlyBillsList.Count != 0)
                 {
@@ -69,7 +69,7 @@
                     {
                         <div class="checkbox panel-body">
                             <label>
-                                <input type="checkbox" name="@monthlyBill.BillDescriptionID" value="@monthlyBill.BillDescriptionID">
+                                <input name="billDescriptionID" type="checkbox" id="@monthlyBill.BillDescriptionID" value="@monthlyBill.BillDescriptionID" />
                                 @monthlyBill.BillDescription
                             </label>
                         </div>

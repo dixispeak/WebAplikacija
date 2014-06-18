@@ -19,12 +19,13 @@
         @if (Model.Bill.PayedBillsMonths.Count != 0)
         {
             <dt>
-                Sumokėta už šiuos mėnesius:
+                Sumokėti mėnesiai:
             </dt>
             foreach (var month in Model.Bill.PayedBillsMonths)
             {
+                string YearMonth = month.PayedBillMonth.ToString("yyyy-MMMM");
                 <dd>
-                    month;
+                    @YearMonth
                 </dd>
             }
         }

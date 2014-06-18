@@ -48,9 +48,8 @@ namespace SpendingsBL.Services
         }
 
 
-        public bool IsPayedBill(int id, DateTime time)
+        public bool IsBillPayed(MonthlyBill bill, DateTime time)
         {
-            MonthlyBill bill = monthlyBillsContext.MonthlyBills.Find(id);
             bool isDone = false;
 
             foreach (PayedBillsMonth payedBillMonth in bill.PayedBillsMonths)
@@ -63,22 +62,22 @@ namespace SpendingsBL.Services
             return isDone;
         }
 
-        public List<MonthlyBill> GetNotPayedMonthlyBills(DateTime time)
+        public List<MonthlyBill> GetNotPayedMonthlyBills()
         {
             List<MonthlyBill> monthlyBillsList = GetMonthlyBills();
             List<MonthlyBill> notPayedMonthlyBillsList = new List<MonthlyBill>();
+
+            DateTime now = DateTime.Now;
+            DateTime today = new DateTime(now.Year, now.Month, 1);
 
             foreach (MonthlyBill monthlyBill in monthlyBillsList)
             {
                 if (monthlyBill.PayedBillsMonths.Count != 0)
                 {
-                    foreach (PayedBillsMonth payedBillMonth in monthlyBill.PayedBillsMonths)
-                    {
-                        if (payedBillMonth.PayedBillMonth != time)
+                    if (IsBillPayed(monthlyBill, today) != true)
                         {
                             notPayedMonthlyBillsList.Add(monthlyBill);
                         }
-                    }
                 }
                 else
                 {
@@ -87,6 +86,26 @@ namespace SpendingsBL.Services
             }
 
             return notPayedMonthlyBillsList;
+        }
+
+
+        public void AddPayedBillMonth(int id)
+        {
+            DateTime now = DateTime.Now;
+            DateTime today = new DateTime(now.Year, now.Month, 1);           
+
+            MonthlyBill monthlyBill = FindBill(id);
+
+            if (IsBillPayed(monthlyBill, today) != true)
+            {
+                PayedBillsMonth payedBillMonth = new PayedBillsMonth()
+                {
+                    BillDescriptionID = id,
+                    PayedBillMonth = today
+                };
+                monthlyBillsContext.PayedBillsMonths.Add(payedBillMonth);
+                monthlyBillsContext.SaveChanges(); 
+            }
         }
     }
 }

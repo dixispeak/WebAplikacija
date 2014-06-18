@@ -11,10 +11,11 @@ namespace SpendingsBL.Interfaces
     {
         List<MonthlyBill> GetMonthlyBills();
         void DeleteBill(int id);
-        void AddBill(MonthlyBill purchase);
-        void EditBill(MonthlyBill purchase);
+        void AddBill(MonthlyBill bill);
+        void EditBill(MonthlyBill bill);
         MonthlyBill FindBill(int id);
-        bool IsPayedBill(int id, System.DateTime time);
-        List<MonthlyBill> GetNotPayedMonthlyBills(DateTime time);
+        bool IsBillPayed(MonthlyBill bill, DateTime time);
+        List<MonthlyBill> GetNotPayedMonthlyBills();
+        void AddPayedBillMonth(int id);
     }
 }

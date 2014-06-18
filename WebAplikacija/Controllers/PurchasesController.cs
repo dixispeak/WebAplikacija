@@ -15,7 +15,7 @@ namespace WebAplikacija.Controllers
     public class PurchasesController : Controller
     {
         private ISpendingsService _SpendingsService;
-        private IMonthlyBillsService _MonthlyBillsService;
+        private IMonthlyBillsService _MonthlyBillsService;               
 
         public PurchasesController(ISpendingsService SpendingsService, IMonthlyBillsService MonthlyBillsService)
         {
@@ -27,10 +27,10 @@ namespace WebAplikacija.Controllers
         public ActionResult Index()
         {
             PurchasesModel purchasesModel = new PurchasesModel();
-            MonthlyBillsModel monthlyBillsModel = new MonthlyBillsModel();
+            MonthlyBillsModel monthlyBillsModel = new MonthlyBillsModel();            
 
-            purchasesModel.PurchasesList = _SpendingsService.GetSpendings();
-            monthlyBillsModel.MonthlyBillsList = _MonthlyBillsService.GetNotPayedMonthlyBills(DateTime.Today);
+            purchasesModel.PurchasesList = _SpendingsService.GetSpendings();            
+            monthlyBillsModel.MonthlyBillsList = _MonthlyBillsService.GetNotPayedMonthlyBills();
 
             PurchasesMonthlyBillsModel purchasesMonthlyBills = new PurchasesMonthlyBillsModel
             { 
@@ -48,37 +48,47 @@ namespace WebAplikacija.Controllers
             purchasesMonthlyBills.PurchasesModel.PurchasesList = _SpendingsService.GetSpendings();
 
             MonthlyBillsModel monthlyBillsModel = new MonthlyBillsModel();
-            var now = DateTime.Now;
-            var today = new DateTime(now.Year, now.Month, 1);
-            monthlyBillsModel.MonthlyBillsList = _MonthlyBillsService.GetNotPayedMonthlyBills(today);
+            
+            monthlyBillsModel.MonthlyBillsList = _MonthlyBillsService.GetNotPayedMonthlyBills();
             purchasesMonthlyBills.MonthlyBillsModel = monthlyBillsModel;
             
             return View(purchasesMonthlyBills);
         }
 
-        public ActionResult MonthlyBills(PurchasesMonthlyBillsModel purchasesMonthlyBills)
+        public ActionResult MonthlyBills(string[] billDescriptionID, PurchasesMonthlyBillsModel purchasesMonthlyBills)
         {
             PurchasesModel purchasesModel = new PurchasesModel();
             MonthlyBillsModel monthlyBillsModel = new MonthlyBillsModel();
 
             purchasesModel.PurchasesList = _SpendingsService.GetSpendings();
 
+            for(int i = 0; i < billDescriptionID.Length; i++) {
+                _MonthlyBillsService.AddPayedBillMonth(Convert.ToInt32(billDescriptionID[i]));
+            }           
 
-            monthlyBillsModel.MonthlyBillsList = _MonthlyBillsService.GetNotPayedMonthlyBills(DateTime.Today);
+            monthlyBillsModel.MonthlyBillsList = _MonthlyBillsService.GetNotPayedMonthlyBills();
 
             purchasesMonthlyBills.PurchasesModel = purchasesModel;
             purchasesMonthlyBills.MonthlyBillsModel = monthlyBillsModel;
-            return View(purchasesMonthlyBills);
+            return View("Index", purchasesMonthlyBills);
         }
 
         public ActionResult Delete(int id)
         {
-            PurchasesModel purchases = new PurchasesModel();
+            PurchasesModel purchasesModel = new PurchasesModel();
+            MonthlyBillsModel monthlyBillsModel = new MonthlyBillsModel();
 
             _SpendingsService.DeleteSpending(id);
 
-            purchases.PurchasesList = _SpendingsService.GetSpendings();
-            return View("Index", purchases);
+            purchasesModel.PurchasesList = _SpendingsService.GetSpendings();
+            monthlyBillsModel.MonthlyBillsList = _MonthlyBillsService.GetNotPayedMonthlyBills();
+
+            PurchasesMonthlyBillsModel purchasesMonthlyBills = new PurchasesMonthlyBillsModel
+            {
+                PurchasesModel = purchasesModel,
+                MonthlyBillsModel = monthlyBillsModel
+            };
+            return View("Index", purchasesMonthlyBills);
         }
 
         public ActionResult About()
@@ -90,18 +100,37 @@ namespace WebAplikacija.Controllers
 
         public ActionResult Edit(int id)
         {
-            PurchasesModel purchases = new PurchasesModel();
-            purchases.Purchase = _SpendingsService.FindSpending(id);
-            return View(purchases);
+            PurchasesModel purchasesModel = new PurchasesModel();
+            MonthlyBillsModel monthlyBillsModel = new MonthlyBillsModel();
+
+            PurchasesMonthlyBillsModel purchasesMonthlyBills = new PurchasesMonthlyBillsModel();
+
+            purchasesModel.PurchasesList = _SpendingsService.GetSpendings();
+            monthlyBillsModel.MonthlyBillsList = _MonthlyBillsService.GetNotPayedMonthlyBills();
+
+            purchasesModel.Purchase = _SpendingsService.FindSpending(id);            
+
+            purchasesMonthlyBills.PurchasesModel = purchasesModel;
+            purchasesMonthlyBills.MonthlyBillsModel = monthlyBillsModel;
+
+            return View(purchasesMonthlyBills);
         }
 
         [HttpPost]
-        public ActionResult Edit(PurchasesModel purchases)
+        public ActionResult Edit(PurchasesMonthlyBillsModel purchasesMonthlyBills)
         {
-            _SpendingsService.EditSpendings(purchases.Purchase);
-            purchases.PurchasesList = _SpendingsService.GetSpendings();
+            PurchasesModel purchasesModel = new PurchasesModel();
+            MonthlyBillsModel monthlyBillsModel = new MonthlyBillsModel();
 
-            return View("Index", purchases);
+            _SpendingsService.EditSpendings(purchasesMonthlyBills.PurchasesModel.Purchase);
+
+            purchasesModel.PurchasesList = _SpendingsService.GetSpendings();
+            monthlyBillsModel.MonthlyBillsList = _MonthlyBillsService.GetNotPayedMonthlyBills();
+
+            purchasesMonthlyBills.PurchasesModel = purchasesModel;
+            purchasesMonthlyBills.MonthlyBillsModel = monthlyBillsModel;
+
+            return View("Index", purchasesMonthlyBills);
         }
     }
 }
