@@ -113,14 +113,5 @@ namespace WebAplikacija.Controllers
             _MonthlyBillsService.DeleteBill(id);
             return RedirectToAction("Index");
         }
-
-        //protected override void Dispose(bool disposing)
-        //{
-        //    if (disposing)
-        //    {
-        //        db.Dispose();
-        //    }
-        //    base.Dispose(disposing);
-        //}
     }
 }

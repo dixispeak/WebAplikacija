@@ -18,18 +18,11 @@ namespace WebAplikacija.Models
     {
         public MonthlyBill Bill { get; set; }
         public List<MonthlyBill> MonthlyBillsList { get; set; }
-        public IList<Bill> PayedBill { get; set; }
     }
 
     public class PurchasesMonthlyBillsModel
     {
         public MonthlyBillsModel MonthlyBillsModel { get; set; }
         public PurchasesModel PurchasesModel { get; set; }
-    }
-
-    public class Bill 
-    {
-        public int BillDescriptionID { get; set; }
-        public bool IsPayed { get; set; }
     }
 }

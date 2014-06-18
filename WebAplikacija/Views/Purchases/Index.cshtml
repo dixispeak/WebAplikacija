@@ -4,6 +4,7 @@
 @model WebAplikacija.Models.PurchasesMonthlyBillsModel
 
 <script type="text/javascript">
+    //allow in in price textbox only integer with comma
     function jsDecimals(e) {
         var evt = (e) ? e : window.event;
         var key = (evt.keyCode) ? evt.keyCode : evt.which;
@@ -43,6 +44,7 @@
         return false;
     }
 
+    //checks both textbox if those are filled
     function checkTextBox() {
         var textboxName = document.getElementById("TextBoxName");
         var textboxPrice = document.getElementById("TextBoxPrice");
@@ -55,12 +57,26 @@
             return true;
         }
     }
+
+    //check checkboxes if there is any check box checked
+    function checkCheckBoxes() {
+        var checkBoxes = document.getElementsByName("billDescriptionID");
+        for (var i = 0; i < checkBoxes.length; i++) {
+            if (checkBoxes[i].checked == false) {
+                alert("Jus nepažymėjote apmokėtas sąskaitas");
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
+
 </script>
 
 @section featured {
     <section id="monthly">
         <div class="panel panel-defaul">
-            @using (Html.BeginForm("MonthlyBills", "Purchases", FormMethod.Post, new { @class = "form-horizontal" }))
+            @using (Html.BeginForm("MonthlyBills", "Purchases", FormMethod.Post, new { @class = "form-horizontal", onsubmit = "return checkCheckBoxes();" }))
             {
                 if (Model.MonthlyBillsModel.MonthlyBillsList.Count != 0)
                 {
@@ -75,11 +91,11 @@
                         </div>
                     }
                     <div class="form-group">
-                    <div class="col-md-offset-2">
-                        <input type="submit" class="btn btn-default" title="saveBtn" value="Išsaugauti" />
+                        <div class="col-md-offset-2">
+                            <input type="submit" class="btn btn-default" title="saveBtn" value="Išsaugauti" />
+                        </div>
                     </div>
-                </div>
-                }                
+                }
             }
         </div>
     </section>

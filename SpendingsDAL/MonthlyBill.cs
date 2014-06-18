@@ -21,6 +21,7 @@ namespace SpendingsDAL
     
         public int BillDescriptionID { get; set; }
         public string BillDescription { get; set; }
+        public bool IsActive { get; set; }
     
         public virtual ICollection<PayedBillsMonth> PayedBillsMonths { get; set; }
     }

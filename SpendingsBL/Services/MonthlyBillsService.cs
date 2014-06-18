@@ -24,9 +24,16 @@ namespace SpendingsBL.Services
         {
             MonthlyBill bill = FindBill(id);
 
-            monthlyBillsContext.MonthlyBills.Remove(bill);
+            if (bill.PayedBillsMonths.Count != 0) 
+            {
+                bill.IsActive = true;
+            }
+            else
+            {
+                monthlyBillsContext.MonthlyBills.Remove(bill);
 
-            monthlyBillsContext.SaveChanges();
+                monthlyBillsContext.SaveChanges();
+            }            
         }
 
         public void AddBill(MonthlyBill bill)
@@ -72,7 +79,7 @@ namespace SpendingsBL.Services
 
             foreach (MonthlyBill monthlyBill in monthlyBillsList)
             {
-                if (monthlyBill.PayedBillsMonths.Count != 0)
+                if (monthlyBill.PayedBillsMonths.Count != 0 && monthlyBill.IsActive == false)
                 {
                     if (IsBillPayed(monthlyBill, today) != true)
                         {

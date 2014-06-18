@@ -62,9 +62,13 @@ namespace WebAplikacija.Controllers
 
             purchasesModel.PurchasesList = _SpendingsService.GetSpendings();
 
-            for(int i = 0; i < billDescriptionID.Length; i++) {
-                _MonthlyBillsService.AddPayedBillMonth(Convert.ToInt32(billDescriptionID[i]));
-            }           
+            if (billDescriptionID != null)
+            {
+                for (int i = 0; i < billDescriptionID.Length; i++)
+                {
+                    _MonthlyBillsService.AddPayedBillMonth(Convert.ToInt32(billDescriptionID[i]));
+                }
+            }
 
             monthlyBillsModel.MonthlyBillsList = _MonthlyBillsService.GetNotPayedMonthlyBills();
 

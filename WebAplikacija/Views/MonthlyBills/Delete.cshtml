@@ -19,12 +19,13 @@
         </dd>
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
             <input type="submit" value="Pašalinti" class="btn btn-default" /> |
-            @Html.ActionLink("Grįžti į mėnesinių sąskaitų sąrašą", "Index")
+            @Html.ActionLink("Grįžti į mėnesio sąskaitų sąrašą", "Index")
         </div>
     }
 </div>
