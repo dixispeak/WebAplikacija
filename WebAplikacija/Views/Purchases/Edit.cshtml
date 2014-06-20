@@ -4,9 +4,67 @@
     ViewBag.Title = "Koreguoti";
 }
 
+<script type="text/javascript">
+
+    //check is checkbox not empty
+    function checkTextBox() {
+        var textboxName = document.getElementById("TextBoxName");
+        var textboxPrice = document.getElementById("TextBoxPrice");
+
+        if (!textboxName.value || !textboxPrice.value) {
+            alert("Nevisi laukeliai užpildyti");
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    //allow in in price textbox only integer with comma
+    function jsDecimals(e) {
+        var evt = (e) ? e : window.event;
+        var key = (evt.keyCode) ? evt.keyCode : evt.which;
+        if (key != null) {
+            key = parseInt(key, 10);
+            if ((key < 48 || key > 57) && (key < 96 || key > 105)) {
+                if (!jsIsUserFriendlyChar(key, "Decimals")) {
+                    return false;
+                }
+            }
+            else {
+                if (evt.shiftKey) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    // Function to check for user friendly keys
+    //------------------------------------------
+    function jsIsUserFriendlyChar(val, step) {
+        // Backspace, Tab, Enter, Insert, and Delete
+        if (val == 8 || val == 9 || val == 13 || val == 45 || val == 46) {
+            return true;
+        }
+        // Ctrl, Alt, CapsLock, Home, End, and Arrows
+        if ((val > 16 && val < 21) || (val > 34 && val < 41)) {
+            return true;
+        }
+        if (step == "Decimals") {
+            if (val == 190 || val == 110) {  //Check dot key code should be allowed
+                return true;
+            }
+        }
+        // The rest
+        return false;
+    }
+
+</script>
+
 <h2>Koreguoti pirkinio aprašymą</h2>
 
-@using (Html.BeginForm("Edit", "Purchases", FormMethod.Post, new { @class = "form-horizontal" }))
+@using (Html.BeginForm("Edit", "Purchases", FormMethod.Post, new { @class = "form-horizontal", onsubmit = "return checkTextBox();" }))
 {
     @Html.AntiForgeryToken()
 
@@ -17,7 +75,7 @@
         <div class="form-group">
             <label class="col-md-2 control-label">Pirkinys:</label>
             <div class="col-md-10">
-                @Html.EditorFor(m => m.PurchasesModel.Purchase.Name)
+                @Html.TextBoxFor(model => model.PurchasesModel.Purchase.Name, new { id = "TextBoxName" })
                 @Html.ValidationMessageFor(m => m.PurchasesModel.Purchase.Name)
             </div>
         </div>
@@ -25,7 +83,7 @@
         <div class="form-group">
             <label class="col-md-2 control-label">Kaina:</label>
             <div class="col-md-10">
-                @Html.EditorFor(m => m.PurchasesModel.Purchase.Price)
+                @Html.TextBoxFor(model => model.PurchasesModel.Purchase.Price, new { id = "TextBoxPrice", onkeydown = "return jsDecimals(event);" })
                 @Html.ValidationMessageFor(m => m.PurchasesModel.Purchase.Price)
             </div>
         </div>

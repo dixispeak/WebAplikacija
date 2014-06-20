@@ -6,7 +6,22 @@
 
 <h2>Koreguoti mėnesio sąskaitą</h2>
 
-@using (Html.BeginForm())
+<script type="text/javascript">
+    //check is checkbox not empty
+    function checkTextBox() {
+        var textbox = document.getElementById("billDescription");
+        if (!textbox.value) {
+            alert("Būtina užpildyti laukelį");
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+</script>
+
+@using (Html.BeginForm("Edit", "MonthlyBills", FormMethod.Post, new { onsubmit = "return checkTextBox();" }))
 {
     @Html.AntiForgeryToken()
     
@@ -18,7 +33,7 @@
         <div class="form-group">
             <label class="col-md-2 control-label">Sąskaitos aprašymas:</label>
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Bill.BillDescription)
+                @Html.TextBoxFor(model => model.Bill.BillDescription, new { id = "billDescription" })
                 @Html.ValidationMessageFor(model => model.Bill.BillDescription)
             </div>
         </div>
@@ -32,5 +47,5 @@
 }
 
 <div>
-    @Html.ActionLink("Grįžti į mėnesio sąskaitų sąrašą", "Index")
+    @Html.ActionLink("Atgal", "Index")
 </div>

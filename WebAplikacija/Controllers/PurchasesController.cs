@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SpendingsBL.Entities;
@@ -44,41 +45,51 @@ namespace WebAplikacija.Controllers
         [HttpPost]
         public ActionResult Index(PurchasesMonthlyBillsModel purchasesMonthlyBills)
         {
-            _SpendingsService.AddSpending(purchasesMonthlyBills.PurchasesModel.Purchase);
-            purchasesMonthlyBills.PurchasesModel.PurchasesList = _SpendingsService.GetSpendings();
+            if (ModelState.IsValid)
+            {
+                _SpendingsService.AddSpending(purchasesMonthlyBills.PurchasesModel.Purchase);
+                purchasesMonthlyBills.PurchasesModel.PurchasesList = _SpendingsService.GetSpendings();
 
-            MonthlyBillsModel monthlyBillsModel = new MonthlyBillsModel();
-            
-            monthlyBillsModel.MonthlyBillsList = _MonthlyBillsService.GetNotPayedMonthlyBills();
-            purchasesMonthlyBills.MonthlyBillsModel = monthlyBillsModel;
+                MonthlyBillsModel monthlyBillsModel = new MonthlyBillsModel();
+
+                monthlyBillsModel.MonthlyBillsList = _MonthlyBillsService.GetNotPayedMonthlyBills();
+                purchasesMonthlyBills.MonthlyBillsModel = monthlyBillsModel;
+            }
             
             return View(purchasesMonthlyBills);
         }
 
         public ActionResult MonthlyBills(string[] billDescriptionID, PurchasesMonthlyBillsModel purchasesMonthlyBills)
         {
-            PurchasesModel purchasesModel = new PurchasesModel();
-            MonthlyBillsModel monthlyBillsModel = new MonthlyBillsModel();
-
-            purchasesModel.PurchasesList = _SpendingsService.GetSpendings();
-
-            if (billDescriptionID != null)
+            if (ModelState.IsValid)
             {
-                for (int i = 0; i < billDescriptionID.Length; i++)
+                PurchasesModel purchasesModel = new PurchasesModel();
+                MonthlyBillsModel monthlyBillsModel = new MonthlyBillsModel();
+
+                purchasesModel.PurchasesList = _SpendingsService.GetSpendings();
+
+                if (billDescriptionID != null)
                 {
-                    _MonthlyBillsService.AddPayedBillMonth(Convert.ToInt32(billDescriptionID[i]));
+                    for (int i = 0; i < billDescriptionID.Length; i++)
+                    {
+                        _MonthlyBillsService.AddPayedBillMonth(Convert.ToInt32(billDescriptionID[i]));
+                    }
                 }
+
+                monthlyBillsModel.MonthlyBillsList = _MonthlyBillsService.GetNotPayedMonthlyBills();
+
+                purchasesMonthlyBills.PurchasesModel = purchasesModel;
+                purchasesMonthlyBills.MonthlyBillsModel = monthlyBillsModel;
             }
-
-            monthlyBillsModel.MonthlyBillsList = _MonthlyBillsService.GetNotPayedMonthlyBills();
-
-            purchasesMonthlyBills.PurchasesModel = purchasesModel;
-            purchasesMonthlyBills.MonthlyBillsModel = monthlyBillsModel;
             return View("Index", purchasesMonthlyBills);
         }
 
         public ActionResult Delete(int id)
         {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
             PurchasesModel purchasesModel = new PurchasesModel();
             MonthlyBillsModel monthlyBillsModel = new MonthlyBillsModel();
 
@@ -104,6 +115,10 @@ namespace WebAplikacija.Controllers
 
         public ActionResult Edit(int id)
         {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
             PurchasesModel purchasesModel = new PurchasesModel();
             MonthlyBillsModel monthlyBillsModel = new MonthlyBillsModel();
 

@@ -55,12 +55,15 @@ namespace WebAplikacija.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(MonthlyBillsModel monthlyBills)
-        {
+        public ActionResult Create([Bind(Include = "BillDescriptionID,BillDescription,IsActive")]MonthlyBillsModel monthlyBills)
+        {            
             if (ModelState.IsValid)
             {
-                _MonthlyBillsService.AddBill(monthlyBills.Bill);
-                return RedirectToAction("Index");
+                if (monthlyBills.Bill != null)
+                {
+                    _MonthlyBillsService.AddBill(monthlyBills.Bill);
+                    return RedirectToAction("Index");
+                }
             }
 
             return View(monthlyBills);
@@ -69,6 +72,10 @@ namespace WebAplikacija.Controllers
         // GET: /MonthlyBills/Edit/5
         public ActionResult Edit(int id)
         {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
             MonthlyBillsModel monthlyBills = new MonthlyBillsModel();
             monthlyBills.Bill = _MonthlyBillsService.FindBill(id);
             if (monthlyBills == null)
@@ -87,8 +94,11 @@ namespace WebAplikacija.Controllers
         {
             if (ModelState.IsValid)
             {
-                _MonthlyBillsService.EditBill(monthlyBills.Bill);
-                return RedirectToAction("Index");
+                if (monthlyBills.Bill.BillDescription != null)
+                {
+                    _MonthlyBillsService.EditBill(monthlyBills.Bill);
+                    return RedirectToAction("Index");
+                }
             }
             return View(monthlyBills);
         }
@@ -96,6 +106,10 @@ namespace WebAplikacija.Controllers
         // GET: /MonthlyBills/Delete/5
         public ActionResult Delete(int id)
         {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
             MonthlyBillsModel monthlyBills = new MonthlyBillsModel();
             monthlyBills.Bill = _MonthlyBillsService.FindBill(id);
             if (monthlyBills == null)
@@ -110,6 +124,10 @@ namespace WebAplikacija.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
             _MonthlyBillsService.DeleteBill(id);
             return RedirectToAction("Index");
         }
