@@ -1,52 +1,66 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SpendingsBL.Entities;
-using SpendingsBL.Interfaces;
-using SpendingsDAL;
+using DomainModel;
+using SpendingsBL.DtoModels;
+using SpendingsBL.Services.Interfaces;
+using SpendingsDAL.Repositories.EntitiesRepositories;
 
 namespace SpendingsBL.Services
 {
     public class SpendingsService : ISpendingsService
     {
-        private PurchasesEntities spendingsContext = new PurchasesEntities();
+		private readonly IPurchaseRepository _purchaseRepository;
 
-        public List<Purchase> GetSpendings()
+	    public SpendingsService()
+	    {
+			_purchaseRepository = new PurchaseRepository();	
+	    }
+		public IEnumerable<PurchaseDto> GetAllSpendings()
         {
-             List<Purchase> purchasesList = spendingsContext.Purchases.ToList();
+			var purchasesEntities = _purchaseRepository.GetAll().ToList();
 
-            return purchasesList;
+			return purchasesEntities.Select(purchaseEntity => new PurchaseDto
+			{
+				PurchaseId = purchaseEntity.PurchaseId, Name = purchaseEntity.Name, Price = purchaseEntity.Price
+			});
         }
 
         public void DeleteSpending(int id)
         {
-            Purchase purchase = FindSpending(id);
-
-            spendingsContext.Purchases.Remove(purchase);
-
-            spendingsContext.SaveChanges();
+			_purchaseRepository.Delete(id);
         }
 
-        public void AddSpending(Purchase purchase)
-        {
-            spendingsContext.Purchases.Add(purchase);
-            spendingsContext.SaveChanges();
+		public void AddSpending(PurchaseDto purchasesDto)
+		{
+			var purchaseEntity = new Purchase
+			{
+				Name = purchasesDto.Name,
+				Price = purchasesDto.Price
+			};
+			_purchaseRepository.Add(purchaseEntity);
         }
 
-        public void EditSpendings(Purchase purchase)
+		public void UpdateSpending(PurchaseDto purchasesDto)
         {
-            spendingsContext.Entry(purchase).State = EntityState.Modified;
-            spendingsContext.SaveChanges();
+			var purchaseEntity = new Purchase
+			{
+				PurchaseId = purchasesDto.PurchaseId,
+				Name = purchasesDto.Name,
+				Price = purchasesDto.Price
+			};
+			_purchaseRepository.Update(purchaseEntity);
         }
 
-        public Purchase FindSpending(int id)
-        {
-            Purchase purchase = spendingsContext.Purchases.Find(id);
-            return purchase;
+		public PurchaseDto GetById(int id)
+		{
+			var purchaseEntity = _purchaseRepository.GetById(id);
+			var purchaseDto = new PurchaseDto
+			{
+				PurchaseId = purchaseEntity.PurchaseId,
+				Name = purchaseEntity.Name,
+				Price = purchaseEntity.Price
+			};
+            return purchaseDto;
         }
     }
 }

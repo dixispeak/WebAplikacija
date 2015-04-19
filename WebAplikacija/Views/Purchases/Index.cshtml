@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
-@model WebAplikacija.Models.PurchasesMonthlyBillsModel
+@model WebAplikacija.ViewModels.PurchasesMonthlyBillsViewModel
 
 <script type="text/javascript">
     //allow in in price textbox only integer with comma
@@ -28,15 +28,15 @@
     //------------------------------------------
     function jsIsUserFriendlyChar(val, step) {
         // Backspace, Tab, Enter, Insert, and Delete
-        if (val == 8 || val == 9 || val == 13 || val == 45 || val == 46) {
+    	if (val === 8 || val === 9 || val === 13 || val === 45 || val === 46) {
             return true;
         }
         // Ctrl, Alt, CapsLock, Home, End, and Arrows
         if ((val > 16 && val < 21) || (val > 34 && val < 41)) {
             return true;
         }
-        if (step == "Decimals") {
-            if (val == 190 || val == 110) {  //Check dot key code should be allowed
+        if (step === "Decimals") {
+            if (val === 190 || val === 110) {  //Check dot key code should be allowed
                 return true;
             }
         }
@@ -60,9 +60,9 @@
 
     //check checkboxes if there is any check box checked
     function checkCheckBoxes() {
-        var checkBoxes = document.getElementsByName("billDescriptionID");
+        var checkBoxes = document.getElementsByName("billId");
         for (var i = 0; i < checkBoxes.length; i++) {
-            if (checkBoxes[i].checked == false) {
+        	if (checkBoxes[i].checked === false) {
                 alert("Jus nepažymėjote apmokėtas sąskaitas");
                 return false;
             } else {
@@ -78,14 +78,14 @@
         <div class="panel panel-defaul">
             @using (Html.BeginForm("MonthlyBills", "Purchases", FormMethod.Post, new { @class = "form-horizontal", onsubmit = "return checkCheckBoxes();" }))
             {
-                if (Model.MonthlyBillsModel.MonthlyBillsList.Count != 0)
+                if (Model.MonthlyBillsViewModels.Any())
                 {
                     <div class="page-header">Šio mėnesio nesumokėtos sąskaitos:</div>
-                    foreach (var monthlyBill in Model.MonthlyBillsModel.MonthlyBillsList)
+                    foreach (var monthlyBill in Model.MonthlyBillsViewModels)
                     {
                         <div class="checkbox panel-body">
                             <label>
-                                <input name="billDescriptionID" type="checkbox" id="@monthlyBill.BillDescriptionID" value="@monthlyBill.BillDescriptionID" />
+                                <input name="billId" type="checkbox" id="@monthlyBill.BillId" value="@monthlyBill.BillId" />
                                 @monthlyBill.BillDescription
                             </label>
                         </div>
@@ -107,11 +107,11 @@
                 <div>
                     <div class="form-group">
                         <label class="col-md-2 control-label">Įveskite pirkinį:</label>
-                        @Html.TextBoxFor(m => m.PurchasesModel.Purchase.Name, new { @class = "form-control col-md-4", id = "TextBoxName" })
+                        @Html.TextBoxFor(m => m.PurchasesViewModel.Purchase.Name, new { @class = "form-control col-md-4", id = "TextBoxName" })
                     </div>
                     <div class="form-group">
                         <label class="col-md-2 control-label">Pirkinio kaina:</label>
-                        @Html.TextBoxFor(m => m.PurchasesModel.Purchase.Price, new { @class = "form-control col-md-4", onkeydown = "return jsDecimals(event);", id = "TextBoxPrice" })
+                        @Html.TextBoxFor(m => m.PurchasesViewModel.Purchase.Price, new { @class = "form-control col-md-4", onkeydown = "return jsDecimals(event);", id = "TextBoxPrice" })
                     </div>
                     <div class="form-group">
                         <div class="col-md-offset-2">
@@ -123,14 +123,14 @@
                 <div class="form-group">
                     <label class="control-label col-md-2">Jūsų pirkinių sąrašas:</label>
                     <ul class="list-group col-md-4">
-                        @if (Model.PurchasesModel.PurchasesList != null)
+                        @if (Model.PurchasesViewModel.PurchasesList != null)
                         {
-                            foreach (var el in Model.PurchasesModel.PurchasesList)
+                            foreach (var el in Model.PurchasesViewModel.PurchasesList)
                             {
-                                <li class="list-group-item" id=@el.PurchaseID>
+                                <li class="list-group-item" id=@el.PurchaseId>
                                     @el.Name - @el.Price Lt
-                                    <a href="@Url.Action("Delete", "Purchases", new { id = @el.PurchaseID })" class="btn badge">&times;</a>
-                                    <a href="@Url.Action("Edit", "Purchases", new { id = @el.PurchaseID })" class="btn badge">Koreguoti</a>
+                                    <a href="@Url.Action("Delete", "Purchases", new { id = @el.PurchaseId })" class="btn badge">&times;</a>
+                                    <a href="@Url.Action("Edit", "Purchases", new { id = @el.PurchaseId })" class="btn badge">Koreguoti</a>
                                 </li>
                             }
                         }

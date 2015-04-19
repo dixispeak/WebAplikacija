@@ -1,4 +1,4 @@
-﻿@model WebAplikacija.Models.MonthlyBillsModel
+﻿@model WebAplikacija.ViewModels.MonthlyBillViewModel
 
 @{
     ViewBag.Title = "Details";
@@ -14,24 +14,24 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Bill.BillDescription)
+            @Html.DisplayFor(model => model.BillDescription)
         </dd>
-        @if (Model.Bill.PayedBillsMonths.Count != 0)
+        @if (Model.PayedBillsMonths.Count != 0)
         {
             <dt>
                 Sumokėti mėnesiai:
             </dt>
-            foreach (var month in Model.Bill.PayedBillsMonths)
+			foreach (var month in Model.PayedBillsMonths)
             {
-                string YearMonth = month.PayedBillMonth.ToString("yyyy-MMMM");
+                string yearMonth = month.PayedBillMonth.ToString("yyyy-MMMM");
                 <dd>
-                    @YearMonth
+                    @yearMonth
                 </dd>
             }
         }
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Koreguoti", "Edit", new { id = Model.Bill.BillDescriptionID }) |
+    @Html.ActionLink("Koreguoti", "Edit", new { id = Model.BillId }) |
     @Html.ActionLink("Atgal", "Index")
 </p>

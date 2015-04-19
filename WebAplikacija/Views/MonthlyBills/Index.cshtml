@@ -1,4 +1,4 @@
-﻿@model WebAplikacija.Models.MonthlyBillsModel
+﻿@model List<WebAplikacija.ViewModels.MonthlyBillViewModel>
 
 @{
     ViewBag.Title = "Mėnesio sąskaitos";
@@ -17,16 +17,16 @@
         <th></th>
     </tr>
 
-    @foreach (var item in Model.MonthlyBillsList)
+    @foreach (var item in Model)
     {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.BillDescription)
             </td>
             <td>
-                <a href="@Url.Action("Edit", new { id = item.BillDescriptionID })" class="btn badge">Koreguoti</a>
-                <a href="@Url.Action("Details", new { id = item.BillDescriptionID })" class="btn badge">Detaliau</a>
-                <a href="@Url.Action("Delete", new { id = item.BillDescriptionID })" class="btn badge">&times;</a>
+                <a href="@Url.Action("Edit", new { id = item.BillId })" class="btn badge">Koreguoti</a>
+                <a href="@Url.Action("Details", new { id = item.BillId })" class="btn badge">Detaliau</a>
+                <a href="@Url.Action("Delete", new { id = item.BillId })" class="btn badge">&times;</a>
             </td>
         </tr>
     }

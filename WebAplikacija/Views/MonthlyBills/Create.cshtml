@@ -1,4 +1,4 @@
-﻿@model WebAplikacija.Models.MonthlyBillsModel
+﻿@model WebAplikacija.ViewModels.MonthlyBillViewModel
 
 @{
     ViewBag.Title = "Sukurti";
@@ -32,8 +32,8 @@
         <div class="form-group">
             <label class="col-md-2 control-label">Sąskaitos aprašymas:</label>
             <div class="col-md-10">
-                @Html.TextBoxFor(model => model.Bill.BillDescription, new { id = "billDescription" })
-                @Html.ValidationMessageFor(model => model.Bill.BillDescription)
+                @Html.TextBoxFor(model => model.BillDescription, new { id = "billDescription" })
+                @Html.ValidationMessageFor(model => model.BillDescription)
             </div>
         </div>
 

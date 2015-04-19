@@ -1,4 +1,4 @@
-﻿@model WebAplikacija.Models.MonthlyBillsModel
+﻿@model WebAplikacija.ViewModels.MonthlyBillViewModel
 
 @{
     ViewBag.Title = "Pašalinti";
@@ -15,7 +15,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Bill.BillDescription)
+            @Html.DisplayFor(model => model.BillDescription)
         </dd>
     </dl>
 

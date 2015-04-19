@@ -1,155 +1,171 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using SpendingsBL.Entities;
-using SpendingsBL.Interfaces;
-using SpendingsBL.Services;
-using WebAplikacija.Models;
+using SpendingsBL.DtoModels;
+using SpendingsBL.Services.Interfaces;
+using WebAplikacija.ViewModels;
 
 namespace WebAplikacija.Controllers
 {
-    [RequireHttps]
-    [Authorize]
-    public class PurchasesController : Controller
-    {
-        private ISpendingsService _SpendingsService;
-        private IMonthlyBillsService _MonthlyBillsService;               
+	[RequireHttps]
+	[Authorize]
+	public class PurchasesController : Controller
+	{
+		private readonly ISpendingsService _spendingsService;
+		private readonly IMonthlyBillsService _monthlyBillsService;
 
-        public PurchasesController(ISpendingsService SpendingsService, IMonthlyBillsService MonthlyBillsService)
-        {
-            _SpendingsService = SpendingsService;
-            _MonthlyBillsService = MonthlyBillsService;
-        }
+		public PurchasesController(ISpendingsService spendingsService, IMonthlyBillsService monthlyBillsService)
+		{
+			_spendingsService = spendingsService;
+			_monthlyBillsService = monthlyBillsService;
+		}
 
-        [HttpGet]
-        public ActionResult Index()
-        {
-            PurchasesModel purchasesModel = new PurchasesModel();
-            MonthlyBillsModel monthlyBillsModel = new MonthlyBillsModel();            
+		[HttpGet]
+		public ActionResult Index()
+		{
+			var purchasesDtos = _spendingsService.GetAllSpendings();
+			var monthlyBillsDtos = _monthlyBillsService.GetNotPayedMonthlyBills();
+			if (purchasesDtos == null || monthlyBillsDtos == null)
+			{
+				return HttpNotFound();
+			}
 
-            purchasesModel.PurchasesList = _SpendingsService.GetSpendings();            
-            monthlyBillsModel.MonthlyBillsList = _MonthlyBillsService.GetNotPayedMonthlyBills();
+			var purchasesMonthlyBillsView = new PurchasesMonthlyBillsViewModel();
+			GetMonthlyBillsAndPurchases(purchasesMonthlyBillsView);
 
-            PurchasesMonthlyBillsModel purchasesMonthlyBills = new PurchasesMonthlyBillsModel
-            { 
-                PurchasesModel = purchasesModel,
-                MonthlyBillsModel = monthlyBillsModel
-            };
+			return View(purchasesMonthlyBillsView);
+		}
 
-            return View(purchasesMonthlyBills);
-        }
+		[HttpPost]
+		public ActionResult Index(PurchasesMonthlyBillsViewModel purchasesMonthlyBillsView)
+		{
+			var purchaseDtoToSave = MapPurchaseViewModelToDto(purchasesMonthlyBillsView.PurchasesViewModel.Purchase);
+			_spendingsService.AddSpending(purchaseDtoToSave);
 
-        [HttpPost]
-        public ActionResult Index(PurchasesMonthlyBillsModel purchasesMonthlyBills)
-        {
-            if (ModelState.IsValid)
-            {
-                _SpendingsService.AddSpending(purchasesMonthlyBills.PurchasesModel.Purchase);
-                purchasesMonthlyBills.PurchasesModel.PurchasesList = _SpendingsService.GetSpendings();
+			GetMonthlyBillsAndPurchases(purchasesMonthlyBillsView);
 
-                MonthlyBillsModel monthlyBillsModel = new MonthlyBillsModel();
+			return View(purchasesMonthlyBillsView);
+		}
 
-                monthlyBillsModel.MonthlyBillsList = _MonthlyBillsService.GetNotPayedMonthlyBills();
-                purchasesMonthlyBills.MonthlyBillsModel = monthlyBillsModel;
-            }
-            
-            return View(purchasesMonthlyBills);
-        }
+		public ActionResult MonthlyBills(string[] billIds, PurchasesMonthlyBillsViewModel purchasesMonthlyBillsView)
+		{
+			if (billIds == null)
+			{
+				return HttpNotFound();
+			}
+			foreach (var id in billIds)
+			{
+				_monthlyBillsService.AddPayedBillMonth(Convert.ToInt32(id));
+			}
 
-        public ActionResult MonthlyBills(string[] billDescriptionID, PurchasesMonthlyBillsModel purchasesMonthlyBills)
-        {
-            if (ModelState.IsValid)
-            {
-                PurchasesModel purchasesModel = new PurchasesModel();
-                MonthlyBillsModel monthlyBillsModel = new MonthlyBillsModel();
+			GetMonthlyBillsAndPurchases(purchasesMonthlyBillsView);
 
-                purchasesModel.PurchasesList = _SpendingsService.GetSpendings();
+			return View("Index", purchasesMonthlyBillsView);
+		}
 
-                if (billDescriptionID != null)
-                {
-                    for (int i = 0; i < billDescriptionID.Length; i++)
-                    {
-                        _MonthlyBillsService.AddPayedBillMonth(Convert.ToInt32(billDescriptionID[i]));
-                    }
-                }
+		public ActionResult Delete(int id)
+		{
+			_spendingsService.DeleteSpending(id);
 
-                monthlyBillsModel.MonthlyBillsList = _MonthlyBillsService.GetNotPayedMonthlyBills();
+			var purchasesMonthlyBillsView = new PurchasesMonthlyBillsViewModel();
+			GetMonthlyBillsAndPurchases(purchasesMonthlyBillsView);
+			return View("Index", purchasesMonthlyBillsView);
+		}
 
-                purchasesMonthlyBills.PurchasesModel = purchasesModel;
-                purchasesMonthlyBills.MonthlyBillsModel = monthlyBillsModel;
-            }
-            return View("Index", purchasesMonthlyBills);
-        }
+		public ActionResult About()
+		{
+			ViewBag.Message = "Your application description page.";
 
-        public ActionResult Delete(int id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            PurchasesModel purchasesModel = new PurchasesModel();
-            MonthlyBillsModel monthlyBillsModel = new MonthlyBillsModel();
+			return View();
+		}
 
-            _SpendingsService.DeleteSpending(id);
+		public ActionResult Edit(int id)
+		{
+			var purchaseDto = _spendingsService.GetById(id);
+			if (purchaseDto == null)
+			{
+				return HttpNotFound();
+			}
+			var purchaseViewModel = MapPurchaseDtoToViewModel(purchaseDto);
+			return View(purchaseViewModel);
+		}
 
-            purchasesModel.PurchasesList = _SpendingsService.GetSpendings();
-            monthlyBillsModel.MonthlyBillsList = _MonthlyBillsService.GetNotPayedMonthlyBills();
+		[HttpPost]
+		public ActionResult Edit(PurchaseViewModel purchaseViewModel)
+		{
+			var purchaseDto = MapPurchaseViewModelToDto(purchaseViewModel);
+			_spendingsService.UpdateSpending(purchaseDto);
 
-            PurchasesMonthlyBillsModel purchasesMonthlyBills = new PurchasesMonthlyBillsModel
-            {
-                PurchasesModel = purchasesModel,
-                MonthlyBillsModel = monthlyBillsModel
-            };
-            return View("Index", purchasesMonthlyBills);
-        }
+			var purchasesMonthlyBillsView = new PurchasesMonthlyBillsViewModel();
+			GetMonthlyBillsAndPurchases(purchasesMonthlyBillsView);
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
+			return View("Index", purchasesMonthlyBillsView);
+		}
 
-            return View();
-        }       
+		private void GetMonthlyBillsAndPurchases(PurchasesMonthlyBillsViewModel purchasesMonthlyBillsView)
+		{
+			var purchasesDtos = _spendingsService.GetAllSpendings();
+			var monthlyBillsDtos = _monthlyBillsService.GetNotPayedMonthlyBills();
+			if (purchasesDtos == null || monthlyBillsDtos == null)
+			{
+				return;
+			}
 
-        public ActionResult Edit(int id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            PurchasesModel purchasesModel = new PurchasesModel();
-            MonthlyBillsModel monthlyBillsModel = new MonthlyBillsModel();
+			purchasesMonthlyBillsView.PurchasesViewModel.PurchasesList = new List<PurchaseViewModel>();
+			foreach (var purchaseViewModel in purchasesDtos.Select(MapPurchaseDtoToViewModel))
+			{
+				purchasesMonthlyBillsView.PurchasesViewModel.PurchasesList.Add(purchaseViewModel);
+			}
 
-            PurchasesMonthlyBillsModel purchasesMonthlyBills = new PurchasesMonthlyBillsModel();
+			purchasesMonthlyBillsView.MonthlyBillsViewModels = new List<MonthlyBillViewModel>();
+			foreach (var monthlyBillsViewModel in monthlyBillsDtos.Select(MapMonthlyBillDtoToViewModel))
+			{
+				purchasesMonthlyBillsView.MonthlyBillsViewModels.Add(monthlyBillsViewModel);
+			}
+		}
 
-            purchasesModel.PurchasesList = _SpendingsService.GetSpendings();
-            monthlyBillsModel.MonthlyBillsList = _MonthlyBillsService.GetNotPayedMonthlyBills();
+		private MonthlyBillViewModel MapMonthlyBillDtoToViewModel(MonthlyBillDto monthlyBillDto)
+		{
+			var monthlyBillViewModel = new MonthlyBillViewModel
+			{
+				BillId = monthlyBillDto.BillId,
+				BillDescription = monthlyBillDto.BillDescription,
+				PayedBillsMonths = new List<PayedBillsMonthViewModel>()
+			};
+			foreach (var payedBillMonthDto in monthlyBillDto.PayedBillsMonths)
+			{
+				var payedBillMonthViewModel = new PayedBillsMonthViewModel
+				{
+					BillId = payedBillMonthDto.BillId,
+					PayedBillMonth = payedBillMonthDto.PayedBillMonth,
+					PayedBillMonthId = payedBillMonthDto.PayedBillMonthId
+				};
+				monthlyBillViewModel.PayedBillsMonths.Add(payedBillMonthViewModel);
+			}
+			return monthlyBillViewModel;
+		}
 
-            purchasesModel.Purchase = _SpendingsService.FindSpending(id);            
+		private PurchaseViewModel MapPurchaseDtoToViewModel(PurchaseDto purchaseDto)
+		{
+			var purchaseViewModel = new PurchaseViewModel
+			{
+				Name = purchaseDto.Name,
+				Price = purchaseDto.Price,
+				PurchaseId = purchaseDto.PurchaseId
+			};
+			return purchaseViewModel;
+		}
 
-            purchasesMonthlyBills.PurchasesModel = purchasesModel;
-            purchasesMonthlyBills.MonthlyBillsModel = monthlyBillsModel;
-
-            return View(purchasesMonthlyBills);
-        }
-
-        [HttpPost]
-        public ActionResult Edit(PurchasesMonthlyBillsModel purchasesMonthlyBills)
-        {
-            PurchasesModel purchasesModel = new PurchasesModel();
-            MonthlyBillsModel monthlyBillsModel = new MonthlyBillsModel();
-
-            _SpendingsService.EditSpendings(purchasesMonthlyBills.PurchasesModel.Purchase);
-
-            purchasesModel.PurchasesList = _SpendingsService.GetSpendings();
-            monthlyBillsModel.MonthlyBillsList = _MonthlyBillsService.GetNotPayedMonthlyBills();
-
-            purchasesMonthlyBills.PurchasesModel = purchasesModel;
-            purchasesMonthlyBills.MonthlyBillsModel = monthlyBillsModel;
-
-            return View("Index", purchasesMonthlyBills);
-        }
-    }
+		private PurchaseDto MapPurchaseViewModelToDto(PurchaseViewModel purchaseViewModel)
+		{
+			var purchaseDto = new PurchaseDto
+			{
+				Name = purchaseViewModel.Name,
+				Price = purchaseViewModel.Price,
+				PurchaseId = purchaseViewModel.PurchaseId
+			};
+			return purchaseDto;
+		}
+	}
 }

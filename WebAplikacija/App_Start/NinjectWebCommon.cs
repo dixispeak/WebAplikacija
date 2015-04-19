@@ -1,3 +1,6 @@
+using SpendingsBL.Services;
+using SpendingsBL.Services.Interfaces;
+
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(WebAplikacija.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(WebAplikacija.App_Start.NinjectWebCommon), "Stop")]
 
@@ -10,8 +13,6 @@ namespace WebAplikacija.App_Start
 
     using Ninject;
     using Ninject.Web.Common;
-    using SpendingsBL.Interfaces;
-    using SpendingsBL.Services;
 
     public static class NinjectWebCommon 
     {
@@ -63,8 +64,8 @@ namespace WebAplikacija.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Bind<ISpendingsService>().To<SpendingsService>();
-            kernel.Bind<IMonthlyBillsService>().To<MonthlyBillsService>();
+			kernel.Bind<ISpendingsService>().To<SpendingsService>();
+			kernel.Bind<IMonthlyBillsService>().To<MonthlyBillsService>();
         }        
     }
 }

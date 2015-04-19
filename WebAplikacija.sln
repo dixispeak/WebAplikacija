@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAplikacija", "WebAplikacija\WebAplikacija.csproj", "{417E0249-172F-4692-B04F-C43CAE0E5BF0}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpendingTest", "SpendingTest\SpendingTest.csproj", "{331F95CA-3225-4521-81C8-3E88531F1EF6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpendingsDAL", "SpendingsDAL\SpendingsDAL.csproj", "{59C1081D-8B40-49BC-95D7-FF65106C554D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainModel", "DomainModel\DomainModel.csproj", "{9AC5B04D-31E7-4EE2-BAA8-E5A9EC751203}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{59C1081D-8B40-49BC-95D7-FF65106C554D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59C1081D-8B40-49BC-95D7-FF65106C554D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59C1081D-8B40-49BC-95D7-FF65106C554D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AC5B04D-31E7-4EE2-BAA8-E5A9EC751203}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AC5B04D-31E7-4EE2-BAA8-E5A9EC751203}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AC5B04D-31E7-4EE2-BAA8-E5A9EC751203}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AC5B04D-31E7-4EE2-BAA8-E5A9EC751203}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

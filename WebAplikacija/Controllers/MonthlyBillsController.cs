@@ -1,135 +1,144 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using SpendingsBL.Interfaces;
-using SpendingsDAL;
-using WebAplikacija.Models;
+using SpendingsBL.DtoModels;
+using SpendingsBL.Services.Interfaces;
+using WebAplikacija.ViewModels;
 
 namespace WebAplikacija.Controllers
 {
-    [Authorize]
-    public class MonthlyBillsController : Controller
-    {
-        private IMonthlyBillsService _MonthlyBillsService;
+	[Authorize]
+	public class MonthlyBillsController : Controller
+	{
+		private readonly IMonthlyBillsService _monthlyBillsService;
 
-        public MonthlyBillsController(IMonthlyBillsService MonthlyBillsService)
-        {
-            _MonthlyBillsService = MonthlyBillsService;
-        }
+		public MonthlyBillsController(IMonthlyBillsService monthlyBillsService)
+		{
+			_monthlyBillsService = monthlyBillsService;
+		}
 
-        // GET: /MonthlyBills/       
-        public ActionResult Index()
-        {
-            MonthlyBillsModel monthlyBills = new MonthlyBillsModel();
+		public ActionResult Index()
+		{
+			var monthlyBillsDtos = _monthlyBillsService.GetAllMonthlyBills();
+			if (monthlyBillsDtos == null)
+			{
+				return HttpNotFound();
+			}
+			var monthlyBillsViews = monthlyBillsDtos.Select(MapMonthlyBillDtoToViewModel).ToList();
 
-            monthlyBills.MonthlyBillsList = _MonthlyBillsService.GetMonthlyBills();
+			return View(monthlyBillsViews);
+		}
 
-            return View(monthlyBills);
-        }
+		public ActionResult Details(int id)
+		{
+			var monthlyBillDto = _monthlyBillsService.GetBillById(id);
+			if (monthlyBillDto == null)
+			{
+				return HttpNotFound();
+			}
+			var monthlyBillView = MapMonthlyBillDtoToViewModel(monthlyBillDto);
+			return View(monthlyBillView);
+		}
 
-        // GET: /MonthlyBills/Details/5
-        public ActionResult Details(int id)
-        {
-            MonthlyBillsModel monthlyBills = new MonthlyBillsModel();
-            monthlyBills.Bill = _MonthlyBillsService.FindBill(id);
-            if (monthlyBills.Bill == null)
-            {
-                return HttpNotFound();
-            }
-            return View(monthlyBills);
-        }
+		public ActionResult Create()
+		{
+			return View();
+		}
 
-        // GET: /MonthlyBills/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult Create(MonthlyBillViewModel monthlyBillView)
+		{
+			if (monthlyBillView == null)
+			{
+				return View((MonthlyBillViewModel)null);
+			}
+			var monthlyBillDto = MapMonthlyBillViewModelToDto(monthlyBillView);
+			_monthlyBillsService.AddBill(monthlyBillDto);
+			return RedirectToAction("Index");
+		}
 
-        // POST: /MonthlyBills/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "BillDescriptionID,BillDescription,IsActive")]MonthlyBillsModel monthlyBills)
-        {            
-            if (ModelState.IsValid)
-            {
-                if (monthlyBills.Bill != null)
-                {
-                    _MonthlyBillsService.AddBill(monthlyBills.Bill);
-                    return RedirectToAction("Index");
-                }
-            }
+		public ActionResult Edit(int id)
+		{
+			var monthlyBillDto = _monthlyBillsService.GetBillById(id);
+			if (monthlyBillDto == null)
+			{
+				return HttpNotFound();
+			}
+			var monthlyBillView = MapMonthlyBillDtoToViewModel(monthlyBillDto);
+			return View(monthlyBillView);
+		}
 
-            return View(monthlyBills);
-        }
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult Edit(MonthlyBillViewModel monthlyBillView)
+		{
+			if (monthlyBillView == null)
+			{
+				return View((MonthlyBillViewModel)null);
+			}
+			var monthlyBillDto = MapMonthlyBillViewModelToDto(monthlyBillView);
+			_monthlyBillsService.UpdateBill(monthlyBillDto);
+			return RedirectToAction("Index");
+		}
 
-        // GET: /MonthlyBills/Edit/5
-        public ActionResult Edit(int id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            MonthlyBillsModel monthlyBills = new MonthlyBillsModel();
-            monthlyBills.Bill = _MonthlyBillsService.FindBill(id);
-            if (monthlyBills == null)
-            {
-                return HttpNotFound();
-            }
-            return View(monthlyBills);
-        }
+		public ActionResult Delete(int id)
+		{
+			var monthlyBillDto = _monthlyBillsService.GetBillById(id);
+			if (monthlyBillDto == null)
+			{
+				return HttpNotFound();
+			}
+			var monthlyBillView = MapMonthlyBillDtoToViewModel(monthlyBillDto);
+			return View(monthlyBillView);
+		}
 
-        // POST: /MonthlyBills/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(MonthlyBillsModel monthlyBills)
-        {
-            if (ModelState.IsValid)
-            {
-                if (monthlyBills.Bill.BillDescription != null)
-                {
-                    _MonthlyBillsService.EditBill(monthlyBills.Bill);
-                    return RedirectToAction("Index");
-                }
-            }
-            return View(monthlyBills);
-        }
+		// POST: /MonthlyBills/Delete/5
+		[HttpPost, ActionName("Delete")]
+		[ValidateAntiForgeryToken]
+		public ActionResult DeleteConfirmed(int id)
+		{
+			_monthlyBillsService.DeleteBill(id);
+			return RedirectToAction("Index");
+		}
 
-        // GET: /MonthlyBills/Delete/5
-        public ActionResult Delete(int id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            MonthlyBillsModel monthlyBills = new MonthlyBillsModel();
-            monthlyBills.Bill = _MonthlyBillsService.FindBill(id);
-            if (monthlyBills == null)
-            {
-                return HttpNotFound();
-            }
-            return View(monthlyBills);
-        }
+		private MonthlyBillViewModel MapMonthlyBillDtoToViewModel(MonthlyBillDto monthlyBillDto)
+		{
+			var monthlyBillViewModel = new MonthlyBillViewModel
+			{
+				BillId = monthlyBillDto.BillId,
+				BillDescription = monthlyBillDto.BillDescription,
+				PayedBillsMonths = new List<PayedBillsMonthViewModel>()
+			};
+			foreach (var payedBillMonthDto in monthlyBillDto.PayedBillsMonths)
+			{
+				var payedBillMonthViewModel = new PayedBillsMonthViewModel
+				{
+					BillId = payedBillMonthDto.BillId,
+					PayedBillMonth = payedBillMonthDto.PayedBillMonth,
+					PayedBillMonthId = payedBillMonthDto.PayedBillMonthId
+				};
+				monthlyBillViewModel.PayedBillsMonths.Add(payedBillMonthViewModel);
+			}
+			return monthlyBillViewModel;
+		}
 
-        // POST: /MonthlyBills/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            _MonthlyBillsService.DeleteBill(id);
-            return RedirectToAction("Index");
-        }
-    }
+		private MonthlyBillDto MapMonthlyBillViewModelToDto(MonthlyBillViewModel monthlyBillView)
+		{
+			var monthlyBillDto = new MonthlyBillDto
+			{
+				BillDescription = monthlyBillView.BillDescription,
+				PayedBillsMonths = new List<PayedBillsMonthDto>()
+			};
+			foreach (var payedBillMonthViewModel in monthlyBillView.PayedBillsMonths)
+			{
+				var payedBillMonthDto = new PayedBillsMonthDto
+				{
+					PayedBillMonth = payedBillMonthViewModel.PayedBillMonth
+				};
+				monthlyBillDto.PayedBillsMonths.Add(payedBillMonthDto);
+			}
+			return monthlyBillDto;
+		}
+	}
 }

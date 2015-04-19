@@ -1,118 +1,158 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SpendingsBL.Interfaces;
-using SpendingsDAL;
+using DomainModel;
+using SpendingsBL.DtoModels;
+using SpendingsBL.Services.Interfaces;
+using SpendingsDAL.Repositories.EntitiesRepositories;
 
 namespace SpendingsBL.Services
 {
-    public class MonthlyBillsService : IMonthlyBillsService
-    {
-        private MonthlyBillsEntities monthlyBillsContext = new MonthlyBillsEntities();
+	public class MonthlyBillsService : IMonthlyBillsService
+	{
+		private readonly IMonthlyBillRepository _monthlyBillRepository;
 
-        public List<MonthlyBill> GetMonthlyBills()
-        {
-            List<MonthlyBill> monthlyBillsList = monthlyBillsContext.MonthlyBills.ToList();
+		public MonthlyBillsService()
+		{
+			_monthlyBillRepository = new MonthlyBillRepository();
+		}
 
-            return monthlyBillsList;
-        }
+		public IEnumerable<MonthlyBillDto> GetAllMonthlyBills()
+		{
+			var monthlyBillsEntities = _monthlyBillRepository.GetAll();
+			return monthlyBillsEntities.Select(MapFromMonthlyBillEntityToDto).ToList();
+		}
 
-        public void DeleteBill(int id)
-        {
-            MonthlyBill bill = FindBill(id);
+		public void DeleteBill(int id)
+		{
+			//Validate
+			var billEntity = _monthlyBillRepository.GetById(id);
 
-            if (bill.PayedBillsMonths.Count != 0) 
-            {
-                bill.IsActive = true;
-            }
-            else
-            {
-                monthlyBillsContext.MonthlyBills.Remove(bill);
+			if (billEntity == null)
+			{
+				throw new Exception("Not excisting bill can not be deleted");
+			}
+			_monthlyBillRepository.Delete(billEntity);
+		}
 
-                monthlyBillsContext.SaveChanges();
-            }            
-        }
+		public void AddBill(MonthlyBillDto billDto)
+		{
+			var billEntity = MapFromMonthlyBillDtoToEntity(billDto);
+			_monthlyBillRepository.Add(billEntity);
+		}
 
-        public void AddBill(MonthlyBill bill)
-        {
-            monthlyBillsContext.MonthlyBills.Add(bill);
-            monthlyBillsContext.SaveChanges();
-        }
+		public void UpdateBill(MonthlyBillDto billDto)
+		{
+			var billEntity = MapFromMonthlyBillDtoToEntity(billDto);
+			_monthlyBillRepository.Add(billEntity);
+		}
 
-        public void EditBill(MonthlyBill bill)
-        {
-            monthlyBillsContext.Entry(bill).State = EntityState.Modified;
-            monthlyBillsContext.SaveChanges();
-        }
+		public MonthlyBillDto GetBillById(int id)
+		{
+			var billEntity = _monthlyBillRepository.GetById(id);
+			var billDto = MapFromMonthlyBillEntityToDto(billEntity);
+			return billDto;
+		}
 
-        public MonthlyBill FindBill(int id)
-        {
-            MonthlyBill bill = monthlyBillsContext.MonthlyBills.Find(id);
-            return bill;
-        }
+		public bool IsBillPayed(MonthlyBillDto bill, DateTime time)
+		{
+			var isDone = false;
 
+			foreach (var payedBillMonth in bill.PayedBillsMonths)
+			{
+				if (payedBillMonth.PayedBillMonth == time)
+				{
+					isDone = true;
+				}
+			}
+			return isDone;
+		}
 
-        public bool IsBillPayed(MonthlyBill bill, DateTime time)
-        {
-            bool isDone = false;
+		public IEnumerable<MonthlyBillDto> GetNotPayedMonthlyBills()
+		{
+			var today = DateTime.Today;
+			var notPayedMonthlyBillsDtos = new List<MonthlyBillDto>();
+			var monthlyBillsEntities = _monthlyBillRepository.GetAll();
 
-            foreach (PayedBillsMonth payedBillMonth in bill.PayedBillsMonths)
-            {
-                if (payedBillMonth.PayedBillMonth == time)
-                {
-                    isDone = true;
-                }
-            }
-            return isDone;
-        }
-
-        public List<MonthlyBill> GetNotPayedMonthlyBills()
-        {
-            List<MonthlyBill> monthlyBillsList = GetMonthlyBills();
-            List<MonthlyBill> notPayedMonthlyBillsList = new List<MonthlyBill>();
-
-            DateTime now = DateTime.Now;
-            DateTime today = new DateTime(now.Year, now.Month, 1);
-
-            foreach (MonthlyBill monthlyBill in monthlyBillsList)
-            {
-                if (monthlyBill.PayedBillsMonths.Count != 0 && monthlyBill.IsActive == false)
-                {
-                    if (IsBillPayed(monthlyBill, today) != true)
-                        {
-                            notPayedMonthlyBillsList.Add(monthlyBill);
-                        }
-                }
-                else
-                {
-                    notPayedMonthlyBillsList.Add(monthlyBill);
-                }
-            }
-
-            return notPayedMonthlyBillsList;
-        }
+			foreach (var monthlyBillEntity in monthlyBillsEntities)
+			{
+				var monthlyBillDto = MapFromMonthlyBillEntityToDto(monthlyBillEntity);
+				if (monthlyBillEntity.PayedBillsMonths.Any() && !monthlyBillEntity.IsActive)
+				{
+					if (!IsBillPayed(monthlyBillDto, today))
+					{
+						notPayedMonthlyBillsDtos.Add(monthlyBillDto);
+					}
+				}
+				else
+				{
+					notPayedMonthlyBillsDtos.Add(monthlyBillDto);
+				}
+			}
+			return notPayedMonthlyBillsDtos;
+		}
 
 
-        public void AddPayedBillMonth(int id)
-        {
-            DateTime now = DateTime.Now;
-            DateTime today = new DateTime(now.Year, now.Month, 1);           
+		public void AddPayedBillMonth(int id)
+		{
+			//TODO: Create new Repository need to refactor database
+			//var today = DateTime.Today;
+			//var monthlyBillEntity = _monthlyBillRepository.GetById(id);
+			//var monthlyBillDto = MapFromMonthlyBillEntityToDto(monthlyBillEntity);
 
-            MonthlyBill monthlyBill = FindBill(id);
+			//if (IsBillPayed(monthlyBillDto, today)) return;
+			//var payedBillMonthEntity = new PayedBillsMonth
+			//{
+			//	BillId = id,
+			//	PayedBillMonth = today
+			//};
+			//_monthlyBillRepository.Add(payedBillMonthEntity);
+		}
 
-            if (IsBillPayed(monthlyBill, today) != true)
-            {
-                PayedBillsMonth payedBillMonth = new PayedBillsMonth()
-                {
-                    BillDescriptionID = id,
-                    PayedBillMonth = today
-                };
-                monthlyBillsContext.PayedBillsMonths.Add(payedBillMonth);
-                monthlyBillsContext.SaveChanges(); 
-            }
-        }
-    }
+		private MonthlyBill MapFromMonthlyBillDtoToEntity(MonthlyBillDto billDto)
+		{
+			var billEntity = new MonthlyBill
+			{
+				BillId = billDto.BillId,
+				BillDescription = billDto.BillDescription,
+				PayedBillsMonths = new List<PayedBillsMonth>()
+			};
+			if (billDto.PayedBillsMonths == null)
+				return billEntity;
+			foreach (var payedBillMonthDto in billDto.PayedBillsMonths)
+			{
+				var payedBillMonthEntity = new PayedBillsMonth
+				{
+					PayedBillMonthId = payedBillMonthDto.PayedBillMonthId,
+					BillId = payedBillMonthDto.BillId,
+					PayedBillMonth = payedBillMonthDto.PayedBillMonth
+				};
+				billEntity.PayedBillsMonths.Add(payedBillMonthEntity);
+			}
+			return billEntity;
+		}
+
+		private MonthlyBillDto MapFromMonthlyBillEntityToDto(MonthlyBill billEntity)
+		{
+			var billDto = new MonthlyBillDto
+			{
+				BillId = billEntity.BillId,
+				BillDescription = billEntity.BillDescription,
+				PayedBillsMonths = new List<PayedBillsMonthDto>()
+			};
+			if (billDto.PayedBillsMonths == null)
+				return billDto;
+			foreach (var payedBillsMonthEntity in billEntity.PayedBillsMonths)
+			{
+				var payedBillsMonthDto = new PayedBillsMonthDto
+				{
+					BillId = payedBillsMonthEntity.BillId,
+					PayedBillMonth = payedBillsMonthEntity.PayedBillMonth,
+					PayedBillMonthId = payedBillsMonthEntity.PayedBillMonthId
+				};
+				billDto.PayedBillsMonths.Add(payedBillsMonthDto);
+			}
+			return billDto;
+		}
+	}
 }

@@ -1,49 +1,61 @@
-﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SpendingsDAL;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
+using NSubstitute;
+using NUnit.Framework;
 using SpendingsBL.Services;
-using SpendingsBL.Interfaces;
+using SpendingsBL.Services.Interfaces;
+using SpendingsDAL;
 
-namespace SpendingTest.SpendingsBL
+namespace SpendingTest.SpendingsBLTest
 {
     [TestFixture]
-    class SpendingsBLTEst
+    public class SpendingsBlTest
     {
-        Purchase purchaseEntity = new Purchase
-        {
-            Name = "Bananas",
-            Price = 1.23m
-        };
+		//private PurchaseEntity _purchaseEntity;
+		//private ISpendingsService _spendingsService;
 
-        ISpendingsService spendingsService = new SpendingsService();
+		//[SetUp]
+		//public void Init()
+		//{
+		//	_purchaseEntity = new PurchaseEntity
+		//	{
+		//		Id = 1,
+		//		Name = "Bananas",
+		//		Price = 1.23m
+		//	};
 
-        [Test]
-        public void GetandAddSpendingsTest()
-        {
-            spendingsService.AddSpending(purchaseEntity);
+		//	_spendingsService = Substitute.For<SpendingsService>();
+		//}
 
-            List<Purchase> purchasesListSaved = spendingsService.GetSpendings();
-            Purchase purchaseexpected = purchasesListSaved[purchasesListSaved.Count - 1];
-            Assert.AreEqual(purchaseexpected.Name, purchaseEntity.Name);
-            Assert.AreEqual(purchaseexpected.Price, purchaseEntity.Price);
-        }
-        [Test]
-        public void DeleteSpendingTest()
-        {            
-            List<Purchase> purchasesList = spendingsService.GetSpendings();
-            Purchase purchase = purchasesList[purchasesList.Count - 1];
-            spendingsService.DeleteSpending(purchase.PurchaseID);
-            purchasesList.Remove(purchase);
+		//[Test]
+		//public void SaveSpending()
+		//{
+		//	//Arrange
+		//	//Act
+		//	_spendingsService.AddSpending(_purchaseEntity);
 
-            Purchase purchaseexpected = purchasesList[purchasesList.Count - 1];
-            List<Purchase> purchasesListSaved = spendingsService.GetSpendings();
-            Purchase purchasecurrent = purchasesListSaved[purchasesListSaved.Count - 1];
-            Assert.AreEqual(purchaseexpected.Name, purchasecurrent.Name);
-            Assert.AreEqual(purchaseexpected.Price, purchasecurrent.Price);
-        }
+		//	//Assert
+		//	//_purchasesEntities.Purchases.Received().Add(Arg.Is<Purchase>(p=>p.Name.Equals("Bananas") && p.Price == 1.23m));
+		//	//_purchasesEntities.Received().SaveChanges();
+		//}
+
+		//[Test]
+		//public void GetSpendings()
+		//{
+		//	//Arrange
+		//	//Act
+		//	var purchasesList = _spendingsService.GetAllSpendings();
+
+		//	//Assert
+		//}
+
+		//[Test]
+		//public void DeleteSpendingTest()
+		//{
+		//	//Arrange
+		//	//Act
+		//	_spendingsService.DeleteSpending(1);
+		//	//Asstert
+		//}
     }
 }
