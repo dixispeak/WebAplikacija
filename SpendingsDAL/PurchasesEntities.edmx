@@ -4,104 +4,103 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="PurchasesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="MonthlyBills">
+    <Schema Namespace="PurchasesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="MonthlyBill">
           <Key>
             <PropertyRef Name="BillId" />
           </Key>
           <Property Name="BillId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="BillDescription" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="BillDescription" Type="nvarchar(max)" Nullable="false" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
         </EntityType>
-        <EntityType Name="PayedBillsMonths">
+        <EntityType Name="PayedBillsMonth">
           <Key>
-            <PropertyRef Name="PayedBillMonthId" />
+            <PropertyRef Name="PayedBillsMonthId" />
           </Key>
-          <Property Name="PayedBillMonthId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PayedBillsMonthId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="BillId" Type="int" Nullable="false" />
-          <Property Name="PayedBillMonth" Type="date" Nullable="true" />
+          <Property Name="PayedBillMonth" Type="date" />
         </EntityType>
-        <EntityType Name="Purchases">
+        <EntityType Name="Purchase">
           <Key>
             <PropertyRef Name="PurchaseId" />
           </Key>
           <Property Name="PurchaseId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Price" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="0" Nullable="false" />
         </EntityType>
-        <Association Name="FK_PayedBillsMonths_MonthlyBills">
-          <End Role="MonthlyBills" Type="Self.MonthlyBills" Multiplicity="1" />
-          <End Role="PayedBillsMonths" Type="Self.PayedBillsMonths" Multiplicity="*" />
+        <Association Name="FK_PayedBillsMonth_MonthlyBill">
+          <End Role="MonthlyBill" Type="Self.MonthlyBill" Multiplicity="1" />
+          <End Role="PayedBillsMonth" Type="Self.PayedBillsMonth" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="MonthlyBills">
+            <Principal Role="MonthlyBill">
               <PropertyRef Name="BillId" />
             </Principal>
-            <Dependent Role="PayedBillsMonths">
+            <Dependent Role="PayedBillsMonth">
               <PropertyRef Name="BillId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="PurchasesModelStoreContainer">
-          <EntitySet Name="MonthlyBills" EntityType="Self.MonthlyBills" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PayedBillsMonths" EntityType="Self.PayedBillsMonths" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Purchases" EntityType="Self.Purchases" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_PayedBillsMonths_MonthlyBills" Association="Self.FK_PayedBillsMonths_MonthlyBills">
-            <End Role="MonthlyBills" EntitySet="MonthlyBills" />
-            <End Role="PayedBillsMonths" EntitySet="PayedBillsMonths" />
+          <EntitySet Name="MonthlyBill" EntityType="Self.MonthlyBill" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PayedBillsMonth" EntityType="Self.PayedBillsMonth" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Purchase" EntityType="Self.Purchase" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_PayedBillsMonth_MonthlyBill" Association="Self.FK_PayedBillsMonth_MonthlyBill">
+            <End Role="MonthlyBill" EntitySet="MonthlyBill" />
+            <End Role="PayedBillsMonth" EntitySet="PayedBillsMonth" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="PurchasesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="PurchasesEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="MonthlyBills" EntityType="PurchasesModel.MonthlyBill" />
+          <EntitySet Name="PayedBillsMonths" EntityType="PurchasesModel.PayedBillsMonth" />
+          <EntitySet Name="Purchases" EntityType="PurchasesModel.Purchase" />
+          <AssociationSet Name="FK_PayedBillsMonth_MonthlyBill" Association="PurchasesModel.FK_PayedBillsMonth_MonthlyBill">
+            <End Role="MonthlyBill" EntitySet="MonthlyBills" />
+            <End Role="PayedBillsMonth" EntitySet="PayedBillsMonths" />
+          </AssociationSet>
+        </EntityContainer>
         <EntityType Name="MonthlyBill">
           <Key>
             <PropertyRef Name="BillId" />
           </Key>
           <Property Name="BillId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="BillDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="BillDescription" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="PayedBillsMonths" Relationship="Self.FK_PayedBillsMonths_MonthlyBills" FromRole="MonthlyBills" ToRole="PayedBillsMonths" />
+          <NavigationProperty Name="PayedBillsMonths" Relationship="PurchasesModel.FK_PayedBillsMonth_MonthlyBill" FromRole="MonthlyBill" ToRole="PayedBillsMonth" />
         </EntityType>
         <EntityType Name="PayedBillsMonth">
           <Key>
-            <PropertyRef Name="PayedBillMonthId" />
+            <PropertyRef Name="PayedBillsMonthId" />
           </Key>
-          <Property Name="PayedBillMonthId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PayedBillsMonthId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="BillId" Type="Int32" Nullable="false" />
-          <Property Name="PayedBillMonth" Type="DateTime" Nullable="true" Precision="0" />
-          <NavigationProperty Name="MonthlyBill" Relationship="Self.FK_PayedBillsMonths_MonthlyBills" FromRole="PayedBillsMonths" ToRole="MonthlyBills" />
+          <Property Name="PayedBillMonth" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="MonthlyBill" Relationship="PurchasesModel.FK_PayedBillsMonth_MonthlyBill" FromRole="PayedBillsMonth" ToRole="MonthlyBill" />
         </EntityType>
         <EntityType Name="Purchase">
           <Key>
             <PropertyRef Name="PurchaseId" />
           </Key>
           <Property Name="PurchaseId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Price" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
         </EntityType>
-        <Association Name="FK_PayedBillsMonths_MonthlyBills">
-          <End Role="MonthlyBills" Type="Self.MonthlyBill" Multiplicity="1" />
-          <End Role="PayedBillsMonths" Type="Self.PayedBillsMonth" Multiplicity="*" />
+        <Association Name="FK_PayedBillsMonth_MonthlyBill">
+          <End Type="PurchasesModel.MonthlyBill" Role="MonthlyBill" Multiplicity="1" />
+          <End Type="PurchasesModel.PayedBillsMonth" Role="PayedBillsMonth" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="MonthlyBills">
+            <Principal Role="MonthlyBill">
               <PropertyRef Name="BillId" />
             </Principal>
-            <Dependent Role="PayedBillsMonths">
+            <Dependent Role="PayedBillsMonth">
               <PropertyRef Name="BillId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="PurchasesEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="MonthlyBills" EntityType="Self.MonthlyBill" />
-          <EntitySet Name="PayedBillsMonths" EntityType="Self.PayedBillsMonth" />
-          <EntitySet Name="Purchases" EntityType="Self.Purchase" />
-          <AssociationSet Name="FK_PayedBillsMonths_MonthlyBills" Association="Self.FK_PayedBillsMonths_MonthlyBills">
-            <End Role="MonthlyBills" EntitySet="MonthlyBills" />
-            <End Role="PayedBillsMonths" EntitySet="PayedBillsMonths" />
-          </AssociationSet>
-        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -110,28 +109,28 @@
         <EntityContainerMapping StorageEntityContainer="PurchasesModelStoreContainer" CdmEntityContainer="PurchasesEntities">
           <EntitySetMapping Name="MonthlyBills">
             <EntityTypeMapping TypeName="PurchasesModel.MonthlyBill">
-              <MappingFragment StoreEntitySet="MonthlyBills">
-                <ScalarProperty Name="BillId" ColumnName="BillId" />
-                <ScalarProperty Name="BillDescription" ColumnName="BillDescription" />
+              <MappingFragment StoreEntitySet="MonthlyBill">
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="BillDescription" ColumnName="BillDescription" />
+                <ScalarProperty Name="BillId" ColumnName="BillId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PayedBillsMonths">
             <EntityTypeMapping TypeName="PurchasesModel.PayedBillsMonth">
-              <MappingFragment StoreEntitySet="PayedBillsMonths">
-                <ScalarProperty Name="PayedBillMonthId" ColumnName="PayedBillMonthId" />
-                <ScalarProperty Name="BillId" ColumnName="BillId" />
+              <MappingFragment StoreEntitySet="PayedBillsMonth">
                 <ScalarProperty Name="PayedBillMonth" ColumnName="PayedBillMonth" />
+                <ScalarProperty Name="BillId" ColumnName="BillId" />
+                <ScalarProperty Name="PayedBillsMonthId" ColumnName="PayedBillsMonthId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Purchases">
             <EntityTypeMapping TypeName="PurchasesModel.Purchase">
-              <MappingFragment StoreEntitySet="Purchases">
-                <ScalarProperty Name="PurchaseId" ColumnName="PurchaseId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
+              <MappingFragment StoreEntitySet="Purchase">
                 <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="PurchaseId" ColumnName="PurchaseId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

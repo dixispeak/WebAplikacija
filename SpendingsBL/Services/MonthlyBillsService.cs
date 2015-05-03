@@ -114,16 +114,16 @@ namespace SpendingsBL.Services
 			var billEntity = new MonthlyBill
 			{
 				BillId = billDto.BillId,
-				BillDescription = billDto.BillDescription,
-				PayedBillsMonths = new List<PayedBillsMonth>()
+				BillDescription = billDto.BillDescription
 			};
 			if (billDto.PayedBillsMonths == null)
 				return billEntity;
+			billEntity.PayedBillsMonths = new List<PayedBillsMonth>();
 			foreach (var payedBillMonthDto in billDto.PayedBillsMonths)
 			{
 				var payedBillMonthEntity = new PayedBillsMonth
 				{
-					PayedBillMonthId = payedBillMonthDto.PayedBillMonthId,
+					PayedBillsMonthId = payedBillMonthDto.PayedBillMonthId,
 					BillId = payedBillMonthDto.BillId,
 					PayedBillMonth = payedBillMonthDto.PayedBillMonth
 				};
@@ -148,7 +148,7 @@ namespace SpendingsBL.Services
 				{
 					BillId = payedBillsMonthEntity.BillId,
 					PayedBillMonth = payedBillsMonthEntity.PayedBillMonth,
-					PayedBillMonthId = payedBillsMonthEntity.PayedBillMonthId
+					PayedBillMonthId = payedBillsMonthEntity.PayedBillsMonthId
 				};
 				billDto.PayedBillsMonths.Add(payedBillsMonthDto);
 			}

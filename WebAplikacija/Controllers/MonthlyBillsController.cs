@@ -127,9 +127,10 @@ namespace WebAplikacija.Controllers
 		{
 			var monthlyBillDto = new MonthlyBillDto
 			{
-				BillDescription = monthlyBillView.BillDescription,
-				PayedBillsMonths = new List<PayedBillsMonthDto>()
+				BillDescription = monthlyBillView.BillDescription
 			};
+			if (monthlyBillView.PayedBillsMonths == null) return monthlyBillDto;
+			monthlyBillDto.PayedBillsMonths = new List<PayedBillsMonthDto>();
 			foreach (var payedBillMonthViewModel in monthlyBillView.PayedBillsMonths)
 			{
 				var payedBillMonthDto = new PayedBillsMonthDto

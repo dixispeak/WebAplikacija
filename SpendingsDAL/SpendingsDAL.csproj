@@ -63,6 +63,7 @@
     <Compile Include="Repositories\EntitiesRepositories\MonthlyBillRepository.cs" />
     <Compile Include="Repositories\EntitiesRepositories\PayedBillsMonthRepository.cs" />
     <Compile Include="Repositories\EntitiesRepositories\PurchaseRepository.cs" />
+    <Compile Include="PurchasesEntities.cs" />
     <Compile Include="Repositories\Repository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

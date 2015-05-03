@@ -6,9 +6,9 @@
     <edmx:Diagrams>
       <Diagram DiagramId="3a49acc53c764a948337d35ff6fba261" Name="Diagram1">
         <EntityTypeShape EntityType="PurchasesModel.MonthlyBill" Width="1.5" PointX="0.75" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="PurchasesModel.PayedBillsMonth" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="PurchasesModel.Purchase" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
-        <AssociationConnector Association="PurchasesModel.FK_PayedBillsMonths_MonthlyBills" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="PurchasesModel.PayedBillsMonth" Width="1.5" PointX="3" PointY="0.875" />
+        <EntityTypeShape EntityType="PurchasesModel.Purchase" Width="1.5" PointX="0.75" PointY="3.75" />
+        <AssociationConnector Association="PurchasesModel.FK_PayedBillsMonth_MonthlyBill" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

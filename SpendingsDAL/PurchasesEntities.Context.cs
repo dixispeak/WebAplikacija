@@ -17,7 +17,7 @@ namespace SpendingsDAL
     public partial class PurchasesEntities : DbContext
     {
         public PurchasesEntities()
-			: base("name=PurchasesDatabase")
+            : base("name=PurchasesEntities")
         {
         }
     

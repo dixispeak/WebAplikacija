@@ -31,7 +31,7 @@ namespace SpendingsDAL.Repositories
 		public virtual IEnumerable<TEntity> GetAll(params Expression<Func<TEntity, object>>[] navigationProperties)
 		{
 			List<TEntity> list;
-			using (_context)
+			using (var context = new PurchasesEntities())
 			{
 				IQueryable<TEntity> dbQuery = _dbSet;
 
@@ -48,7 +48,7 @@ namespace SpendingsDAL.Repositories
 		public virtual IEnumerable<TEntity> GetList(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>,
 			IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "")
 		{
-			using (_context)
+			using (var context = new PurchasesEntities())
 			{
 				IQueryable<TEntity> dbQuery = _dbSet;
 
@@ -74,7 +74,7 @@ namespace SpendingsDAL.Repositories
 
 		public virtual void Add(params TEntity[] items)
 		{
-			using (_context)
+			using (var context = new PurchasesEntities())
 			{
 				foreach (var item in items)
 				{
@@ -86,7 +86,7 @@ namespace SpendingsDAL.Repositories
 
 		public virtual void Update(params TEntity[] items)
 		{
-			using (_context)
+			using (var context = new PurchasesEntities())
 			{
 				foreach (var item in items)
 				{
@@ -98,7 +98,7 @@ namespace SpendingsDAL.Repositories
 
 		public virtual void Delete(params TEntity[] items)
 		{
-			using (_context = new PurchasesEntities())
+			using (var context = new PurchasesEntities())
 			{
 				foreach (var item in items)
 				{
@@ -110,7 +110,7 @@ namespace SpendingsDAL.Repositories
 
 		public virtual void Delete(params int[] ids)
 		{
-			using (_context)
+			using (var context = new PurchasesEntities())
 			{
 				foreach (var id in ids)
 				{

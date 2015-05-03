@@ -14,7 +14,7 @@ namespace DomainModel
     
     public partial class PayedBillsMonth
     {
-        public int PayedBillMonthId { get; set; }
+        public int PayedBillsMonthId { get; set; }
         public int BillId { get; set; }
         public Nullable<System.DateTime> PayedBillMonth { get; set; }
     

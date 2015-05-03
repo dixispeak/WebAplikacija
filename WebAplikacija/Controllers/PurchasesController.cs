@@ -111,8 +111,7 @@ namespace WebAplikacija.Controllers
 			{
 				return;
 			}
-
-			purchasesMonthlyBillsView.PurchasesViewModel.PurchasesList = new List<PurchaseViewModel>();
+			purchasesMonthlyBillsView.PurchasesViewModel = new PurchasesViewModel {PurchasesList = new List<PurchaseViewModel>()};
 			foreach (var purchaseViewModel in purchasesDtos.Select(MapPurchaseDtoToViewModel))
 			{
 				purchasesMonthlyBillsView.PurchasesViewModel.PurchasesList.Add(purchaseViewModel);
